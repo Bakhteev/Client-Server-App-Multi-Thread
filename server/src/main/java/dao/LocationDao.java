@@ -1,11 +1,24 @@
 package dao;
 
 import dto.PersonDto;
+import models.Coordinates;
 import models.Location;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
-public class LocationDao implements DAO<Location>{
+public class LocationDao implements DAO<Location> {
+
+    private final Connection connection;
+    private final String getCoordinatesByIdQuery = "SELECT * FROM Locations WHERE id=?";
+
+    public LocationDao(Connection connection) {
+        this.connection = connection;
+    }
+
     @Override
     public List<Location> getAll() {
         return null;
@@ -13,7 +26,26 @@ public class LocationDao implements DAO<Location>{
 
     @Override
     public Location getById(String id) {
-        return null;
+        try {
+            PreparedStatement statement = connection.prepareStatement(getCoordinatesByIdQuery);
+            statement.setInt(1, Integer.parseInt(id));
+            ResultSet locationFromDb = statement.executeQuery();
+            Location location = null;
+            while (locationFromDb.next()) {
+                int locationsId = locationFromDb.getInt("id");
+                long x = locationFromDb.getLong("x");
+                int y = locationFromDb.getInt("y");
+                float z = locationFromDb.getFloat("z");
+                String name = locationFromDb.getString("name");
+                location = new Location(locationsId, x, y, z, name);
+                break;
+            }
+//            statement.executeUpdate();
+            return location;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new Location();
+        }
     }
 
     @Override

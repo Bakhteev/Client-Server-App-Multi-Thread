@@ -5,6 +5,7 @@ import lombok.Setter;
 import java.io.Serializable;
 @Setter
 public class Coordinates implements Serializable {
+    private int id;
     private Integer x; //Поле не может быть null
     private int y; //Максимальное значение поля: 988
 
@@ -12,6 +13,12 @@ public class Coordinates implements Serializable {
     }
 
     public Coordinates(Integer x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public Coordinates(int id, Integer x, int y) {
+        this.id = id;
         this.x = x;
         this.y = y;
     }
@@ -26,6 +33,6 @@ public class Coordinates implements Serializable {
 
     @Override
     public String toString() {
-        return "{" + " x: " + x + ";" + " y: " + y + "; " + '}';
+        return "{" + " id: " + id +";" + " x: " + x + ";" + " y: " + y + "; " + '}';
     }
 }

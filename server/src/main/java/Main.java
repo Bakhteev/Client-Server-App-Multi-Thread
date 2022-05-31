@@ -1,4 +1,7 @@
 import commands.*;
+import dao.CoordinatesDao;
+import dao.LocationDao;
+import dao.PersonDao;
 import managers.LinkedListCollectionManager;
 import managers.ServerCommandManager;
 import models.*;
@@ -10,6 +13,7 @@ import java.io.Console;
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -95,6 +99,23 @@ public class Main {
 
         assert connection != null;
         String sqlReqInit =
+//                "BEGIN;\n" +
+//                        "\n" +
+//                        "DO $$\n" +
+//                        "BEGIN\n" +
+//                        "    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'eyesColor') THEN" +
+//                        "        create type eyesColor AS ENUM ('GREEN', 'BLUE', 'ORANGE');" +
+//                        "    END IF;\n" +
+//                        "END\n" +
+//                        "$$;" +
+//                        "DO $$\n" +
+//                        "BEGIN\n" +
+//                        "    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'hairsColor') THEN\n" +
+//                        "        CREATE TYPE hairsColor AS ENUM ('BLACK', 'WHITE', 'BROWN');" +
+//                        "    END IF;\n" +
+//                        "END\n" +
+//                        "$$;" +
+//                        "COMMIT;"+
                 "CREATE TYPE eyesColor AS ENUM ('GREEN', 'BLUE', 'ORANGE');\n" +
                         "CREATE TYPE hairsColor AS ENUM ('BLACK', 'WHITE', 'BROWN');" +
                         "CREATE TABLE IF NOT EXISTS Coordinates(" +
@@ -116,7 +137,7 @@ public class Main {
                         "password VARCHAR(255) NOT NULL" +
                         ");" +
                         "CREATE TABLE IF NOT EXISTS Persons" +
-                        "("+
+                        "(" +
                         "    id          SERIAL PRIMARY KEY UNIQUE," +
                         "    date        date                            NOT NUll,                    --Поле не может быть null\n" +
                         "    name        VARCHAR(80)                     NOT NULL,--Поле не может быть null, Строка не может быть пустой\n" +
@@ -126,79 +147,39 @@ public class Main {
                         "    eyesColor   eyesColor                       NOT NUll,                    --Поле не может быть null\n" +
                         "    hairsColor  hairsColor                      NOT NUll,                    --Поле не может быть null\n" +
                         "    location    INT REFERENCES Locations (id)  ON DELETE CASCADE   NOT NUll," +
-                        "    ownerId INT REFERENCES Users (id) NOT NULL"+
+                        "    ownerId INT REFERENCES Users (id) NOT NULL" +
                         ");" +
                         "INSERT INTO Users (login, password)" +
-                        "VALUES ('test@mail.ru', 'password');"+
+                        "VALUES ('test@mail.ru', 'password');" +
                         "INSERT INTO Locations(x, y, z, name)\n" +
-                        "VALUES (10, 10, 10.00, 'moscow');\n" +
-                        "INSERT INTO Coordinates(x, y)\n" +
-                        "VALUES (10, 10.05);" +
-                        "INSERT INTO Persons(date, name, coordinates, height, weight, eyesColor, hairsColor, location, ownerId)\n" +
-                        "VALUES ('2021-11-29', 'name', 1, 100, 100, 'GREEN', 'BLACK', 1, 1);";
+                        "VALUES " +
+                        "(10, 10, 10.00, 'moscow')," +
+                        "(10, 10, 10.00, 'moscow');" +
+                        "INSERT INTO Coordinates(x, y)" +
+                        "VALUES " +
+                        "(10, 10.05)," +
+                        "(10, 10.05);" +
+                        "INSERT INTO Persons(date, name, coordinates, height, weight, eyesColor, hairsColor, location, ownerId)" +
+                        "VALUES " +
+                        "('2021-11-29', 'name', 1, 100, 100, 'GREEN', 'BLACK', 1, 1)," +
+                        "('2021-11-29', 'name', 2, 100, 100, 'GREEN', 'BLACK', 2, 1);";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sqlReqInit);
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        Statement statement;
-        String query = "SELECT * from Persons LIMIT 1";
-        try {
-            statement = connection.createStatement();
-            ResultSet personFromDb = statement.executeQuery(query);
-            String locationId = null;
-            String coordinatesId = null;
-//            if (personFromDb != null) {
-//                System.out.println(personFromDb.getInt("id"));
-            Person p = new Person();
-            while (personFromDb.next()) {
-                p.setId(personFromDb.getInt("id"));
-//                    LocalDateTime date = personFromDb.getObject("date", LocalDateTime.class);
-                p.setCreationDate(personFromDb.getTimestamp("date").toLocalDateTime());
-                p.setName(personFromDb.getString("name"));
-                p.setWeight(personFromDb.getFloat("weight"));
-                p.setHeight(personFromDb.getLong("height"));
-                locationId = personFromDb.getString("location");
-                coordinatesId = personFromDb.getString("coordinates");
-                p.setHairsColor(HairsColor.valueOf(personFromDb.getString("hairsColor")));
-                p.setEyesColor(EyesColor.valueOf(personFromDb.getString("eyesColor")));
-                p.setOwnerId(personFromDb.getInt("ownerId"));
-
-            }
-
-//                System.out.println(p);
-
-            String locationQuery = "SELECT x, y, z,name FROM Locations WHERE id = " + locationId + " LIMIT 1";
-
-            Location l = new Location();
-            ResultSet locationFromDb = statement.executeQuery(locationQuery);
-            while (locationFromDb.next()) {
-                l.setX(locationFromDb.getLong("x"));
-                l.setY(locationFromDb.getInt("y"));
-                l.setZ(locationFromDb.getFloat("z"));
-                l.setName(locationFromDb.getString("name"));
-            }
-            p.setLocation(l);
-
-            String coordinatesQuery = "SELECT x, y FROM Coordinates WHERE id = " + coordinatesId + " LIMIT 1";
-
-            ResultSet coordinatesFromDb = statement.executeQuery(coordinatesQuery);
-            Coordinates c = new Coordinates();
-            while (coordinatesFromDb.next()) {
-                c.setX(coordinatesFromDb.getInt("x"));
-                c.setY(coordinatesFromDb.getInt("y"));
-            }
-            p.setCoordinates(c);
-
-            System.out.println(p);
         } catch (PSQLException e) {
             e.printStackTrace();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
+        LocationDao locationDao = new LocationDao(connection);
+        CoordinatesDao coordinatesDao = new CoordinatesDao(connection);
+        PersonDao personDao = new PersonDao(connection, locationDao, coordinatesDao);
+
+        List<Person> arr = personDao.getAll();
+
+        arr.forEach(System.out::println);
 
     }
 }

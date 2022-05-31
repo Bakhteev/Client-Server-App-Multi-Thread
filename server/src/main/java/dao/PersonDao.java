@@ -35,14 +35,12 @@ public class PersonDao implements DAO<Person> {
 
     @Override
     public List<Person> getAll() {
-        List<Person> listOfPerson = new LinkedList<Person>();
+        List<Person> listOfPerson = new LinkedList<>();
         Statement statement = null;
         try {
             statement = connection.createStatement();
 
             ResultSet personsFromDb = statement.executeQuery(getAllPersonsQuery);
-
-
             while (personsFromDb.next()) {
                 Integer id = personsFromDb.getInt("id");
 

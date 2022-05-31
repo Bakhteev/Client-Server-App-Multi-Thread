@@ -3,8 +3,10 @@ package models;
 import lombok.Setter;
 
 import java.io.Serializable;
+
 @Setter
 public class Location implements Serializable {
+    private int id;
     private Long x; //Поле не может быть null
     private int y;
     private Float z; //Поле не может быть null
@@ -14,6 +16,14 @@ public class Location implements Serializable {
     }
 
     public Location(Long x, int y, Float z, String name) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.name = name;
+    }
+
+    public Location(int id, Long x, int y, Float z, String name) {
+        this.id = id;
         this.x = x;
         this.y = y;
         this.z = z;
@@ -38,6 +48,6 @@ public class Location implements Serializable {
 
     @Override
     public String toString() {
-        return "{" + " x: " + x + ";" + " y: " + y + ";" + " z: " + z + ";" + " name: '" + name + "'; " + '}';
+        return "{" + " id: " + id + ";" + " x: " + x + ";" + " y: " + y + ";" + " z: " + z + ";" + " name: '" + name + "'; " + '}';
     }
 }
