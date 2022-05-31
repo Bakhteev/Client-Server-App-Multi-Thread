@@ -1,0 +1,6 @@
+DROP TYPE eyesColor;
+DROP TYPE hairsColor;
+
+
+CREATE TYPE eyesColor AS ENUM ('GREEN', 'BLUE', 'ORANGE');
+CREATE TYPE hairsColor AS ENUM ('BLACK', 'WHITE', 'BROWN');

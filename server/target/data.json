@@ -1,0 +1,40 @@
+[
+  {
+    "id": 109666675,
+    "name": "name",
+    "coordinates": {
+      "x": 145,
+      "y": 145
+    },
+    "creationDate": "2022-05-22T15:36:49.8918799",
+    "height": 154,
+    "weight": 54.0,
+    "eyesColor": "green",
+    "hairsColor": "black",
+    "location": {
+      "x": 145,
+      "y": 145,
+      "z": 145.0,
+      "name": "Moscow"
+    }
+  },
+  {
+    "id": 1387394377,
+    "name": "name",
+    "coordinates": {
+      "x": 145,
+      "y": 145
+    },
+    "creationDate": "2022-05-22T15:51:03.8283387",
+    "height": 154,
+    "weight": 54.0,
+    "eyesColor": "green",
+    "hairsColor": "black",
+    "location": {
+      "x": 145,
+      "y": 145,
+      "z": 145.0,
+      "name": "Moscow"
+    }
+  }
+]
