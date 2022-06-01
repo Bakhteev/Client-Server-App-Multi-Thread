@@ -50,4 +50,8 @@ public class Location implements Serializable {
     public String toString() {
         return "{" + " id: " + id + ";" + " x: " + x + ";" + " y: " + y + ";" + " z: " + z + ";" + " name: '" + name + "'; " + '}';
     }
+
+    public int getId() {
+        return id;
+    }
 }

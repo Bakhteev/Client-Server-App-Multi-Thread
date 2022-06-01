@@ -2,6 +2,7 @@ import commands.*;
 import dao.CoordinatesDao;
 import dao.LocationDao;
 import dao.PersonDao;
+import dto.PersonDto;
 import managers.LinkedListCollectionManager;
 import managers.ServerCommandManager;
 import models.*;
@@ -116,15 +117,15 @@ public class Main {
 //                        "END\n" +
 //                        "$$;" +
 //                        "COMMIT;"+
-                "CREATE TYPE eyesColor AS ENUM ('GREEN', 'BLUE', 'ORANGE');\n" +
+                        "CREATE TYPE eyesColor AS ENUM ('GREEN', 'BLUE', 'ORANGE');" +
                         "CREATE TYPE hairsColor AS ENUM ('BLACK', 'WHITE', 'BROWN');" +
                         "CREATE TABLE IF NOT EXISTS Coordinates(" +
-                        "        id Serial PRIMARY KEY,\n" +
-                        "        x integer,\n" +
-                        "        y integer\n" +
+                        "        id Serial PRIMARY KEY," +
+                        "        x integer," +
+                        "        y integer" +
                         ");" +
                         "CREATE TABLE IF NOT EXISTS Locations" +
-                        "(\n" +
+                        "(" +
                         "    id   Serial Unique Primary key," +
                         "    x    integer      NOT NULL, --Поле не может быть null\n" +
                         "    y    integer      NOT NULL," +
@@ -141,33 +142,33 @@ public class Main {
                         "    id          SERIAL PRIMARY KEY UNIQUE," +
                         "    date        date                            NOT NUll,                    --Поле не может быть null\n" +
                         "    name        VARCHAR(80)                     NOT NULL,--Поле не может быть null, Строка не может быть пустой\n" +
-                        "    coordinates INT REFERENCES Coordinates (id)  ON DELETE CASCADE NOT NULL,                    --Поле не может быть null\n" +
+                        "    coordinates INT REFERENCES Coordinates (id) ON DELETE CASCADE NOT NULL,                    --Поле не может быть null\n" +
                         "    height      Int                             NOT NULL,--Поле не может быть null, Значение поля должно быть больше 0\n" +
                         "    weight      float                           NOT NULL Check (weight > 0), --Значение поля должно быть больше 0\n" +
                         "    eyesColor   eyesColor                       NOT NUll,                    --Поле не может быть null\n" +
                         "    hairsColor  hairsColor                      NOT NUll,                    --Поле не может быть null\n" +
-                        "    location    INT REFERENCES Locations (id)  ON DELETE CASCADE   NOT NUll," +
+                        "    location    INT REFERENCES Locations (id)   ON DELETE CASCADE   NOT NUll," +
                         "    ownerId INT REFERENCES Users (id) NOT NULL" +
                         ");" +
                         "INSERT INTO Users (login, password)" +
                         "VALUES ('test@mail.ru', 'password');" +
-                        "INSERT INTO Locations(x, y, z, name)\n" +
+                        "INSERT INTO Locations(x, y, z, name)" +
                         "VALUES " +
                         "(10, 10, 10.00, 'moscow')," +
                         "(10, 10, 10.00, 'moscow');" +
                         "INSERT INTO Coordinates(x, y)" +
-                        "VALUES " +
+                        "VALUES" +
                         "(10, 10.05)," +
                         "(10, 10.05);" +
                         "INSERT INTO Persons(date, name, coordinates, height, weight, eyesColor, hairsColor, location, ownerId)" +
-                        "VALUES " +
+                        "VALUES" +
                         "('2021-11-29', 'name', 1, 100, 100, 'GREEN', 'BLACK', 1, 1)," +
                         "('2021-11-29', 'name', 2, 100, 100, 'GREEN', 'BLACK', 2, 1);";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sqlReqInit);
             preparedStatement.executeUpdate();
         } catch (PSQLException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -179,7 +180,16 @@ public class Main {
 
         List<Person> arr = personDao.getAll();
 
-        arr.forEach(System.out::println);
+//        personDao.getById("1");
 
+//        arr.forEach(System.out::println);
+        PersonDto dto = new PersonDto();
+        dto.setHeight(156L);
+        dto.setName("xui");
+        dto.setOwnerId(1);
+        dto.setHairsColor(HairsColor.BROWN);
+        System.out.println(personDao.getById("1"));
+        System.out.println(personDao.update("1", dto));
+        System.out.println(personDao.getById("1"));
     }
 }

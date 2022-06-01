@@ -3,6 +3,7 @@ package models;
 import lombok.Setter;
 
 import java.io.Serializable;
+
 @Setter
 public class Coordinates implements Serializable {
     private int id;
@@ -31,8 +32,10 @@ public class Coordinates implements Serializable {
         return y;
     }
 
+    public int getId() {return id;}
+
     @Override
     public String toString() {
-        return "{" + " id: " + id +";" + " x: " + x + ";" + " y: " + y + "; " + '}';
+        return "{" + " id: " + id + ";" + " x: " + x + ";" + " y: " + y + "; " + '}';
     }
 }

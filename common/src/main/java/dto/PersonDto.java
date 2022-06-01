@@ -20,12 +20,12 @@ public class PersonDto implements Serializable {
     private EyesColor eyesColor = null; //Поле не может быть null
     private HairsColor hairsColor = null; //Поле не может быть null
     private Location location = null; //Поле не может быть null
-
+    private int ownerId = 0;
     public PersonDto() {
     }
 
     public PersonDto(String name, Coordinates coordinates, Long height, float weight, EyesColor eyesColor,
-                     HairsColor hairsColor, Location location) throws IllegalArgumentException {
+                     HairsColor hairsColor, Location location,int ownerId) throws IllegalArgumentException {
         this.name = name;
         this.coordinates = coordinates;
         this.height = height;
@@ -33,6 +33,7 @@ public class PersonDto implements Serializable {
         this.eyesColor = eyesColor;
         this.hairsColor = hairsColor;
         this.location = location;
+        this.ownerId = ownerId;
     }
 
     @Override
