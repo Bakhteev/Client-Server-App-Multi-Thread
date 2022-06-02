@@ -13,6 +13,7 @@ public class CoordinatesDao implements DAO<Coordinates> {
     private final Connection connection;
     private final String getCoordinatesByIdQuery = "SELECT * FROM Coordinates WHERE id=?;";
     private final String createCoordinatesQuery = "INSERT INTO Coordinates (x,y) VALUES(?,?) RETURNING id;";
+    private final String deleteCoordinatesQuery = "DELETE FROM Coordinates WHERE id=?";
 
     public CoordinatesDao(Connection connection) {
         this.connection = connection;
@@ -64,7 +65,13 @@ public class CoordinatesDao implements DAO<Coordinates> {
 
     @Override
     public void deleteById(String id) {
-
+        try {
+            PreparedStatement statement = connection.prepareStatement(deleteCoordinatesQuery);
+            statement.setInt(1, Integer.parseInt(id));
+            statement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

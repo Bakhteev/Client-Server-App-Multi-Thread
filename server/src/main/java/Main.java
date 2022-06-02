@@ -35,14 +35,14 @@ public class Main {
 //                new HelpCommand(commandManager),
 //                new InfoCommand(collectionManager),
 //                new ShowCommand(collectionManager.getCollection()),
-//                new AddCommand(collectionManager),
+////                new AddCommand(collectionManager),
 //                new UpdateCommand(collectionManager),
 //                new RemoveByIdCommand(collectionManager),
-//                new AddIfMinCommand(collectionManager),
+////                new AddIfMinCommand(collectionManager),
 //                new ExitCommand(),
 //                new ExecuteScriptCommand(),
 //                new ClearCommand(collectionManager),
-//                new RemoveGreaterCommand(collectionManager),
+////                new RemoveGreaterCommand(collectionManager),
 //                new PrintDescendingCommand(collectionManager.getCollection()),
 //                new PrintUniqueLocationCommand(collectionManager.getCollection()),
 //                new CountByHeightCommand(collectionManager.getCollection()),
@@ -165,7 +165,7 @@ public class Main {
                         "INSERT INTO Persons(date, name, coordinates, height, weight, eyesColor, hairsColor, location, ownerId)" +
                         "VALUES" +
                         "('2021-11-29 10:20:30', 'name', 1, 100, 100, 'GREEN', 'BLACK', 1, 1)," +
-                        "('2021-11-29 10:20:31'::timestamp, 'name', 2, 100, 100, 'GREEN', 'BLACK', 2, 1);";
+                        "('2021-11-29 10:20:31', 'name', 2, 100, 100, 'GREEN', 'BLACK', 2, 1);";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sqlReqInit);
             preparedStatement.executeUpdate();
@@ -180,24 +180,27 @@ public class Main {
         CoordinatesDao coordinatesDao = new CoordinatesDao(connection);
         PersonDao personDao = new PersonDao(connection, locationDao, coordinatesDao);
 
-        List<Person> arr = personDao.getAll();
 
 //        personDao.getById("1");
 
-//        arr.forEach(System.out::println);
-        PersonDto dto = new PersonDto();
-        dto.setHeight(156L);
-        dto.setName("xuiiiiiiiii");
-        dto.setOwnerId(1);
-        dto.setHairsColor(HairsColor.BROWN);
-        System.out.println(personDao.getById("1"));
-        System.out.println(personDao.update("1", dto));
+
+//        PersonDto dto = new PersonDto();
+//        dto.setHeight(156L);
+//        dto.setName("xuiiiiiiiii");
+//        dto.setOwnerId(1);
+//        dto.setHairsColor(HairsColor.BROWN);
+//        System.out.println(personDao.getById("1"));
+//        System.out.println(personDao.update("1", dto));
 //        System.out.println(personDao.getById("1"));
 //        PersonDto dto = new PersonDto("new xui 2", new CoordinatesDto(10, 100), 100L, 154.F, EyesColor.BLUE, HairsColor.BROWN,
 //                new LocationDto(100L,
-//                100, 1000.F,
-//                "xui"), 1);
+//                        100, 1000.F,
+//                        "xui"), 1);
 //
 //        System.out.println(personDao.create(dto));
+        personDao.deleteById("1");
+        List<Person> arr = personDao.getAll();
+        arr.forEach(System.out::println);
+
     }
 }

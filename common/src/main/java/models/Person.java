@@ -44,6 +44,10 @@ public class Person implements Serializable {
         return Math.abs(uniqueKey.hashCode());
     }
 
+    public int getOwnerId() {
+        return ownerId;
+    }
+
     public Integer getId() {
         return id;
     }

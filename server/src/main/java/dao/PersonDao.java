@@ -18,13 +18,14 @@ public class PersonDao implements DAO<Person> {
     final private String getAllPersonsQuery = "SELECT * FROM Persons";
     final private String getPersonByIdQuery = "SELECT * FROM Persons WHERE id = ?";
     final private String createPersonQuery = "INSERT INTO Persons(date, name, coordinates, height, weight, eyesColor," +
-            "hairsColor, " +
-            "location, ownerId) VALUES (?,?,?,?,?,CAST(? AS eyesColor),CAST(? AS hairsColor),?,?) RETURNING id;";
+            "hairsColor, location, ownerId) VALUES (?, ?, ?, ?, ?, CAST(? AS eyesColor), CAST(? AS hairsColor),?, ?) RETURNING id;";
     final private String updatePersonQuery = "UPDATE Persons SET name=?, height=?, weight=?, hairsColor=CAST(? AS hairsColor)" +
             "WHERE id = ? AND ownerId = ?";
 
-    final private String deletePersonByIdQuery = "DELETE FROM Persons WHERE id=? AND ownerId=?";
-    final private String deletePersonQuery = "DELETE FROM Persons WHERE ownerId=?";
+    final private String deletePersonByIdQuery = "DELETE FROM Persons WHERE id=?";
+    final private String getAllPersonsByOwnerIdQuery = "SELECT * FROM Persons WHERE ownerId = ?";
+    final private String deleteAllPersonsByOwnerIdQuery = "DELETE FROM Persons WHERE ownerId = ?";
+    final private String deletePersonByOwnerId = "DELETE FROM Persons WHERE ownerId = ?";
 
     public PersonDao(Connection connection, LocationDao locationDao, CoordinatesDao coordinatesDao) {
         this.connection = connection;
@@ -202,10 +203,12 @@ public class PersonDao implements DAO<Person> {
             statement.setInt(6, dto.getOwnerId());
             statement.executeUpdate();
             Person newPerson = getById(id);
+
             if (!autoCommit) {
                 connection.commit();
                 setAutoCommit();
             }
+
             return newPerson;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -222,11 +225,83 @@ public class PersonDao implements DAO<Person> {
 
     @Override
     public void deleteById(String id) {
+        try {
+            if (autoCommit) {
+                setAutoCommit();
+            }
+            Person personToDelete = getById(id);
+            coordinatesDao.deleteById(personToDelete.getCoordinates().getId() + "");
+            locationDao.deleteById(personToDelete.getLocation().getId() + "");
+            PreparedStatement statement = connection.prepareStatement(deletePersonByIdQuery);
+            statement.setInt(1, Integer.parseInt(id));
+            statement.execute();
+            if (!autoCommit) {
+                connection.commit();
+                setAutoCommit();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            try {
+                if (!autoCommit) {
+                    connection.rollback();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
 
     }
+
+    public List<Person> getAllByOwnerId(String ownerId) {
+        List<Person> listOfPerson = new LinkedList<>();
+        try {
+            if (autoCommit) {
+                setAutoCommit();
+            }
+            PreparedStatement statement = connection.prepareStatement(getAllPersonsByOwnerIdQuery);
+            statement.setInt(1, Integer.parseInt(ownerId));
+            ResultSet personsFromDb = statement.executeQuery();
+            while (personsFromDb.next()) {
+                Integer id = personsFromDb.getInt("id");
+                String name = personsFromDb.getString("name");
+                LocalDateTime dateTime = personsFromDb.getTimestamp("date").toLocalDateTime();
+                float weight = personsFromDb.getFloat("weight");
+                Long height = personsFromDb.getLong("height");
+                Location location = locationDao.getById(personsFromDb.getString("location"));
+                Coordinates coordinates = coordinatesDao.getById(personsFromDb.getString("coordinates"));
+                HairsColor hairsColor = HairsColor.valueOf(personsFromDb.getString("hairsColor"));
+                EyesColor eyesColor = EyesColor.valueOf(personsFromDb.getString("eyesColor"));
+                int ownerIdentificator = personsFromDb.getInt("ownerId");
+
+                Person person = new Person(id, name, coordinates, dateTime, height, weight, eyesColor, hairsColor, location, ownerIdentificator);
+                listOfPerson.add(person);
+            }
+            if (!autoCommit) {
+                connection.commit();
+                setAutoCommit();
+            }
+            return listOfPerson;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            try {
+                if (!autoCommit) {
+                    connection.rollback();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            return listOfPerson;
+        }
+    }
+
 
     @Override
     public void delete(Person element) {
 
+    }
+
+    public boolean checkPersonByOwnerId(String personId, String ownerId) {
+        Person person = getById(personId);
+        return ownerId.equals(String.valueOf(person.getOwnerId()));
     }
 }

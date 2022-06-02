@@ -17,6 +17,7 @@ public class LocationDao implements DAO<Location> {
     private final Connection connection;
     private final String getLocationByIdQuery = "SELECT * FROM Locations WHERE id=?";
     private final String createLocationQuery = "INSERT INTO Locations (x, y, z, name) VALUES(?, ?, ?, ?) RETURNING id";
+    private final String deleteLocationQuery = "DELETE FROM Locations WHERE id=?";
 
     public LocationDao(Connection connection) {
         this.connection = connection;
@@ -88,7 +89,13 @@ public class LocationDao implements DAO<Location> {
 
     @Override
     public void deleteById(String id) {
-
+        try {
+            PreparedStatement statement = connection.prepareStatement(deleteLocationQuery);
+            statement.setInt(1, Integer.parseInt(id));
+            statement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
