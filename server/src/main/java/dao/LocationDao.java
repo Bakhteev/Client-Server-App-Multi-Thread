@@ -1,5 +1,7 @@
 package dao;
 
+import dto.CoordinatesDto;
+import dto.LocationDto;
 import dto.PersonDto;
 import models.Coordinates;
 import models.Location;
@@ -13,7 +15,8 @@ import java.util.List;
 public class LocationDao implements DAO<Location> {
 
     private final Connection connection;
-    private final String getCoordinatesByIdQuery = "SELECT * FROM Locations WHERE id=?";
+    private final String getLocationByIdQuery = "SELECT * FROM Locations WHERE id=?";
+    private final String createLocationQuery = "INSERT INTO Locations (x, y, z, name) VALUES(?, ?, ?, ?) RETURNING id";
 
     public LocationDao(Connection connection) {
         this.connection = connection;
@@ -27,7 +30,7 @@ public class LocationDao implements DAO<Location> {
     @Override
     public Location getById(String id) {
         try {
-            PreparedStatement statement = connection.prepareStatement(getCoordinatesByIdQuery);
+            PreparedStatement statement = connection.prepareStatement(getLocationByIdQuery);
             statement.setInt(1, Integer.parseInt(id));
             ResultSet locationFromDb = statement.executeQuery();
             Location location = null;
@@ -50,7 +53,32 @@ public class LocationDao implements DAO<Location> {
 
     @Override
     public Location create(PersonDto dto) {
-        return null;
+        LocationDto locationDto = dto.getLocationDto();
+        try {
+//            connection.setAutoCommit(false);
+            PreparedStatement statement = connection.prepareStatement(createLocationQuery);
+
+            statement.setLong(1, locationDto.getX());
+            statement.setFloat(2, locationDto.getY());
+            statement.setFloat(3, locationDto.getZ());
+            statement.setString(4, locationDto.getName());
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            String id = resultSet.getString(1);
+
+//            connection.commit();
+//            connection.setAutoCommit(true);
+
+            return getById(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+//            try {
+//                connection.rollback();
+//            } catch (SQLException ex) {
+//                ex.printStackTrace();
+//            }
+            return null;
+        }
     }
 
     @Override

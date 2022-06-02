@@ -51,7 +51,8 @@ public class UpdateCommand extends AbstractCommand {
             if (personToUpdate == null) {
                 throw new PersonNotFoundException("Person with id: " + req.getParams() + "wasn't found");
             }
-            collectionManager.update(personToUpdate, (PersonDto) req.getBody());
+            //TODO
+//            collectionManager.update(personToUpdate, (PersonDto) req.getBody());
             return new Response<>(Response.Status.COMPLETED, "", PersonFormatter.format(personToUpdate));
         } catch (NumberFormatException e) {
             System.out.println("Wrong id Format: " + req.getParams());

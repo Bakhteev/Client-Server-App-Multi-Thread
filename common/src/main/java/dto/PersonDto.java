@@ -14,25 +14,26 @@ import java.io.Serializable;
 @Getter
 public class PersonDto implements Serializable {
     private String name = null; //Поле не может быть null, Строка не может быть пустой
-    private Coordinates coordinates = null; //Поле не может быть null
+    private CoordinatesDto coordinatesDto = null; //Поле не может быть null
     private Long height = null; //Поле не может быть null, Значение поля должно быть больше 0
     private float weight = 0; //Значение поля должно быть больше 0
     private EyesColor eyesColor = null; //Поле не может быть null
     private HairsColor hairsColor = null; //Поле не может быть null
-    private Location location = null; //Поле не может быть null
+    private LocationDto locationDto = null; //Поле не может быть null
     private int ownerId = 0;
+
     public PersonDto() {
     }
 
-    public PersonDto(String name, Coordinates coordinates, Long height, float weight, EyesColor eyesColor,
-                     HairsColor hairsColor, Location location,int ownerId) throws IllegalArgumentException {
+    public PersonDto(String name, CoordinatesDto coordinatesDto, Long height, float weight, EyesColor eyesColor,
+                     HairsColor hairsColor, LocationDto locationDto,int ownerId) throws IllegalArgumentException {
         this.name = name;
-        this.coordinates = coordinates;
+        this.coordinatesDto = coordinatesDto;
         this.height = height;
         this.weight = weight;
         this.eyesColor = eyesColor;
         this.hairsColor = hairsColor;
-        this.location = location;
+        this.locationDto = locationDto;
         this.ownerId = ownerId;
     }
 
@@ -40,12 +41,12 @@ public class PersonDto implements Serializable {
     public String toString() {
         return "PersonDto{" +
                 "name='" + name + '\'' +
-                ", coordinates=" + coordinates +
+                ", coordinates=" + coordinatesDto +
                 ", height=" + height +
                 ", weight=" + weight +
                 ", eyesColor=" + eyesColor +
                 ", hairsColor=" + hairsColor +
-                ", location=" + location +
+                ", location=" + locationDto +
                 '}';
     }
 }

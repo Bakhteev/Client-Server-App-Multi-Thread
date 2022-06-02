@@ -2,6 +2,8 @@ import commands.*;
 import dao.CoordinatesDao;
 import dao.LocationDao;
 import dao.PersonDao;
+import dto.CoordinatesDto;
+import dto.LocationDto;
 import dto.PersonDto;
 import managers.LinkedListCollectionManager;
 import managers.ServerCommandManager;
@@ -117,7 +119,7 @@ public class Main {
 //                        "END\n" +
 //                        "$$;" +
 //                        "COMMIT;"+
-                        "CREATE TYPE eyesColor AS ENUM ('GREEN', 'BLUE', 'ORANGE');" +
+                "CREATE TYPE eyesColor AS ENUM ('GREEN', 'BLUE', 'ORANGE');" +
                         "CREATE TYPE hairsColor AS ENUM ('BLACK', 'WHITE', 'BROWN');" +
                         "CREATE TABLE IF NOT EXISTS Coordinates(" +
                         "        id Serial PRIMARY KEY," +
@@ -140,7 +142,7 @@ public class Main {
                         "CREATE TABLE IF NOT EXISTS Persons" +
                         "(" +
                         "    id          SERIAL PRIMARY KEY UNIQUE," +
-                        "    date        date                            NOT NUll,                    --Поле не может быть null\n" +
+                        "    date        TIMESTAMP                       NOT NUll,                    --Поле не может быть null\n" +
                         "    name        VARCHAR(80)                     NOT NULL,--Поле не может быть null, Строка не может быть пустой\n" +
                         "    coordinates INT REFERENCES Coordinates (id) ON DELETE CASCADE NOT NULL,                    --Поле не может быть null\n" +
                         "    height      Int                             NOT NULL,--Поле не может быть null, Значение поля должно быть больше 0\n" +
@@ -162,8 +164,8 @@ public class Main {
                         "(10, 10.05);" +
                         "INSERT INTO Persons(date, name, coordinates, height, weight, eyesColor, hairsColor, location, ownerId)" +
                         "VALUES" +
-                        "('2021-11-29', 'name', 1, 100, 100, 'GREEN', 'BLACK', 1, 1)," +
-                        "('2021-11-29', 'name', 2, 100, 100, 'GREEN', 'BLACK', 2, 1);";
+                        "('2021-11-29 10:20:30', 'name', 1, 100, 100, 'GREEN', 'BLACK', 1, 1)," +
+                        "('2021-11-29 10:20:31'::timestamp, 'name', 2, 100, 100, 'GREEN', 'BLACK', 2, 1);";
         try {
             PreparedStatement preparedStatement = connection.prepareStatement(sqlReqInit);
             preparedStatement.executeUpdate();
@@ -183,13 +185,19 @@ public class Main {
 //        personDao.getById("1");
 
 //        arr.forEach(System.out::println);
-        PersonDto dto = new PersonDto();
-        dto.setHeight(156L);
-        dto.setName("xui");
-        dto.setOwnerId(1);
-        dto.setHairsColor(HairsColor.BROWN);
-        System.out.println(personDao.getById("1"));
-        System.out.println(personDao.update("1", dto));
-        System.out.println(personDao.getById("1"));
+//        PersonDto dto = new PersonDto();
+//        dto.setHeight(156L);
+//        dto.setName("ghvdgdv");
+//        dto.setOwnerId(1);
+//        dto.setHairsColor(HairsColor.BROWN);
+//        System.out.println(personDao.getById("1"));
+//        System.out.println(personDao.update("1", dto));
+//        System.out.println(personDao.getById("1"));
+        PersonDto dto = new PersonDto("new xui 2", new CoordinatesDto(10, 100), 100L, 154.F, EyesColor.BLUE, HairsColor.BROWN,
+                new LocationDto(100L,
+                100, 1000.F,
+                "xui"), 1);
+
+        System.out.println(personDao.create(dto));
     }
 }

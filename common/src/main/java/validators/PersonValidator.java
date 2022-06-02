@@ -60,26 +60,26 @@ public class PersonValidator {
                 sb.append("name can't be empty");
             }
         }
-        if (personDto.getCoordinates() == null) {
+        if (personDto.getCoordinatesDto() == null) {
             sb.append("Coordinates can't be null").append("\n");
         } else {
-            if (personDto.getCoordinates().getX() == null) {
+            if (personDto.getCoordinatesDto().getX() == null) {
                 sb.append("Coordinates X can't be null ").append("\n");
             }
-            if (personDto.getCoordinates().getY() > 988) {
+            if (personDto.getCoordinatesDto().getY() > 988) {
                 sb.append("Coordinates Y can't be bigger then 988").append("\n");
             }
         }
         if (personDto.getHairsColor() == null) {
             sb.append("Hairs' color can't  be null").append("\n");
         }
-        if (personDto.getLocation() == null) {
+        if (personDto.getLocationDto() == null) {
             sb.append("location can't be null").append("\n");
         } else {
-            if (personDto.getLocation().getX() == null) {
+            if (personDto.getLocationDto().getX() == null) {
                 sb.append("Location X can't be null").append("\n");
             }
-            if (personDto.getLocation().getName() == null) {
+            if (personDto.getLocationDto().getName() == null) {
                 sb.append("Location name can't be null").append("\n");
             }
         }
