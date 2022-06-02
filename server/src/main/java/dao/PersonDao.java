@@ -3,7 +3,6 @@ package dao;
 import dto.PersonDto;
 import models.*;
 
-import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
@@ -176,7 +175,9 @@ public class PersonDao implements DAO<Person> {
     @Override
     public Person update(String id, PersonDto dto) {
         try {
-            connection.setAutoCommit(false);
+            if (autoCommit) {
+                setAutoCommit();
+            }
 
             PreparedStatement statement = connection.prepareStatement(updatePersonQuery);
 
@@ -201,13 +202,17 @@ public class PersonDao implements DAO<Person> {
             statement.setInt(6, dto.getOwnerId());
             statement.executeUpdate();
             Person newPerson = getById(id);
-            connection.commit();
-            connection.setAutoCommit(true);
+            if (!autoCommit) {
+                connection.commit();
+                setAutoCommit();
+            }
             return newPerson;
         } catch (SQLException e) {
             e.printStackTrace();
             try {
-                connection.rollback();
+                if (!autoCommit) {
+                    connection.rollback();
+                }
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }

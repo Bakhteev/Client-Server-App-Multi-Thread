@@ -185,19 +185,19 @@ public class Main {
 //        personDao.getById("1");
 
 //        arr.forEach(System.out::println);
-//        PersonDto dto = new PersonDto();
-//        dto.setHeight(156L);
-//        dto.setName("ghvdgdv");
-//        dto.setOwnerId(1);
-//        dto.setHairsColor(HairsColor.BROWN);
+        PersonDto dto = new PersonDto();
+        dto.setHeight(156L);
+        dto.setName("xuiiiiiiiii");
+        dto.setOwnerId(1);
+        dto.setHairsColor(HairsColor.BROWN);
+        System.out.println(personDao.getById("1"));
+        System.out.println(personDao.update("1", dto));
 //        System.out.println(personDao.getById("1"));
-//        System.out.println(personDao.update("1", dto));
-//        System.out.println(personDao.getById("1"));
-        PersonDto dto = new PersonDto("new xui 2", new CoordinatesDto(10, 100), 100L, 154.F, EyesColor.BLUE, HairsColor.BROWN,
-                new LocationDto(100L,
-                100, 1000.F,
-                "xui"), 1);
-
-        System.out.println(personDao.create(dto));
+//        PersonDto dto = new PersonDto("new xui 2", new CoordinatesDto(10, 100), 100L, 154.F, EyesColor.BLUE, HairsColor.BROWN,
+//                new LocationDto(100L,
+//                100, 1000.F,
+//                "xui"), 1);
+//
+//        System.out.println(personDao.create(dto));
     }
 }

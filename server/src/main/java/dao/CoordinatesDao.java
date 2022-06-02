@@ -44,25 +44,15 @@ public class CoordinatesDao implements DAO<Coordinates> {
     public Coordinates create(PersonDto dto) {
         CoordinatesDto coordinatesDto = dto.getCoordinatesDto();
         try {
-//            connection.setAutoCommit(false);
             PreparedStatement statement = connection.prepareStatement(createCoordinatesQuery);
             statement.setInt(1, coordinatesDto.getX());
             statement.setFloat(2, coordinatesDto.getY());
             ResultSet resultSet = statement.executeQuery();
-//            ResultSet resultSet = statement.getResultSet();
             resultSet.next();
             String id = statement.getResultSet().getString(1);
-
-//            connection.commit();
-//            connection.setAutoCommit(true);
             return getById(id);
         } catch (SQLException e) {
             e.printStackTrace();
-//            try {
-//                connection.rollback();
-//            } catch (SQLException ex) {
-//                ex.printStackTrace();
-//            }
             return null;
         }
     }
