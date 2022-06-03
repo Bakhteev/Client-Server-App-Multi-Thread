@@ -43,10 +43,12 @@ public class Client {
         try {
             writer = new RequestSender(socket.socket().getOutputStream());
         } catch (IOException e) {
+            e.printStackTrace();
         }
         try {
             reader = new ResponseHandler(socket.socket().getInputStream());
         } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

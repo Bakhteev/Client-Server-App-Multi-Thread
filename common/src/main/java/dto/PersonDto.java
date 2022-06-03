@@ -41,12 +41,12 @@ public class PersonDto implements Serializable {
     public String toString() {
         return "PersonDto{" +
                 "name='" + name + '\'' +
-                ", coordinates=" + coordinatesDto +
+                ", coordinates=" + coordinatesDto.toString() +
                 ", height=" + height +
                 ", weight=" + weight +
                 ", eyesColor=" + eyesColor +
                 ", hairsColor=" + hairsColor +
-                ", location=" + locationDto +
+                ", location=" + locationDto.toString() +
                 '}';
     }
 }

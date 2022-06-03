@@ -22,12 +22,14 @@ public class CommandWorkerModule implements Runnable {
         try {
             writer = new ResponseSenderModule(clientSocket.getOutputStream());
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
+//            System.out.println(e.getMessage());
         }
         try {
             reader = new RequestHandlerModule(clientSocket.getInputStream());
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
+//            System.out.println(e.getMessage());
         }
     }
 
@@ -54,8 +56,8 @@ public class CommandWorkerModule implements Runnable {
         try {
             request = reader.readRequest();
         } catch (IOException | ClassNotFoundException e) {
-//            e.printStackTrace();
-            close();
+            e.printStackTrace();
+//            close();
         }
         if (request == null) {
             close();
@@ -76,7 +78,7 @@ public class CommandWorkerModule implements Runnable {
     }
 
     @Override
-    public void run() {
+    public synchronized void run() {
         setup();
         while (!clientSocket.isClosed()) {
             handleRequest();

@@ -17,12 +17,12 @@ public class Server {
     private final int port;
     ConnectionModule connectionModule;
     private ExecutorService threadPool;
-    private ServerCommandManager commandManager;
+    private ServerCommandManager[] commandManager;
 
-    public Server(int port, ServerCommandManager commandManager) {
+    public Server(int port, ServerCommandManager[] commandManager) {
         this.port = port;
         this.commandManager = commandManager;
-        this.threadPool = Executors.newFixedThreadPool(1);
+        this.threadPool = Executors.newFixedThreadPool(3);
     }
 
     public boolean start() {
@@ -42,7 +42,19 @@ public class Server {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            threadPool.execute(new CommandWorkerModule(connectionModule.getClientSocket(), commandManager));
+//            int i = 1;
+//            for (ServerCommandManager commandManagerr : commandManager) {
+//                System.out.println(i);
+//            while (true) {
+                threadPool.submit(new CommandWorkerModule(connectionModule.getClientSocket(), commandManager[0]));
+                threadPool.submit(new CommandWorkerModule(connectionModule.getClientSocket(), commandManager[1]));
+
+//            }
+//            threadPool.shutdown();
+//            threadPool.execute(new CommandWorkerModule(connectionModule.getClientSocket(), commandManager[1]));
+//            threadPool.execute(new CommandWorkerModule(connectionModule.getClientSocket(), commandManager[2]));
+
+//            }
         }
     }
 

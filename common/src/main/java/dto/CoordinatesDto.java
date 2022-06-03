@@ -18,4 +18,11 @@ public class CoordinatesDto implements Serializable {
     }
 
 
+    @Override
+    public String toString() {
+        return "CoordinatesDto{" +
+                "x=" + x +
+                ", y=" + y +
+                '}';
+    }
 }

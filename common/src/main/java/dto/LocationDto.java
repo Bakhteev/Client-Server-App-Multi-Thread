@@ -19,4 +19,14 @@ public class LocationDto implements Serializable {
         this.z = z;
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return "LocationDto{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }

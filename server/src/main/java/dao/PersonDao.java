@@ -94,7 +94,9 @@ public class PersonDao implements DAO<Person> {
             PreparedStatement statement = connection.prepareStatement(getPersonByIdQuery);
             statement.setInt(1, Integer.parseInt(id));
             ResultSet personFromDb = statement.executeQuery();
-            personFromDb.next();
+            if (!personFromDb.next()) {
+                return null;
+            }
             Integer personsId = personFromDb.getInt("id");
             String name = personFromDb.getString("name");
             LocalDateTime dateTime = personFromDb.getTimestamp("date").toLocalDateTime();
@@ -112,7 +114,6 @@ public class PersonDao implements DAO<Person> {
             }
             return new Person(personsId, name, coordinates, dateTime, height, weight, eyesColor, hairsColor, location, ownerId);
         } catch (SQLException e) {
-            e.printStackTrace();
             try {
                 if (!autoCommit) {
                     connection.rollback();
@@ -120,6 +121,7 @@ public class PersonDao implements DAO<Person> {
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
+            e.printStackTrace();
             return null;
         }
 
@@ -183,7 +185,9 @@ public class PersonDao implements DAO<Person> {
             PreparedStatement statement = connection.prepareStatement(updatePersonQuery);
 
             Person prevPerson = getById(id);
-
+            if (prevPerson == null) {
+                throw new IllegalArgumentException("Person with id: " + id + "not found");
+            }
             statement.setString(1, dto.getName() == null ? prevPerson.getName() : dto.getName());
 
             if (dto.getCoordinatesDto() != null) {
@@ -230,6 +234,9 @@ public class PersonDao implements DAO<Person> {
                 setAutoCommit();
             }
             Person personToDelete = getById(id);
+            if (personToDelete == null) {
+                throw new IllegalArgumentException("Person with id: " + id + " not found");
+            }
             coordinatesDao.deleteById(personToDelete.getCoordinates().getId() + "");
             locationDao.deleteById(personToDelete.getLocation().getId() + "");
             PreparedStatement statement = connection.prepareStatement(deletePersonByIdQuery);
@@ -293,6 +300,44 @@ public class PersonDao implements DAO<Person> {
             return listOfPerson;
         }
     }
+
+    public void deleteAllPersonsByOwnerId(String ownerId) {
+        try{
+            if (autoCommit) {
+                setAutoCommit();
+            }
+//        Person personToDelete = getById(id);
+            List<Person> listOfPerson = getAllByOwnerId(ownerId);
+            if (listOfPerson.isEmpty()) {
+                throw new IllegalArgumentException("You have no elements to delete");
+            }
+            listOfPerson.forEach(person -> {
+                coordinatesDao.deleteById(person.getCoordinates().getId() + "");
+                locationDao.deleteById(person.getLocation().getId() + "");
+            });
+            try {
+                PreparedStatement statement = connection.prepareStatement(deleteAllPersonsByOwnerIdQuery);
+                statement.setInt(1, Integer.parseInt(ownerId));
+                statement.execute();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            if (!autoCommit) {
+                connection.commit();
+                setAutoCommit();
+            }
+        } catch(SQLException e){
+        e.printStackTrace();
+        try {
+            if (!autoCommit) {
+                connection.rollback();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+}
 
 
     @Override
