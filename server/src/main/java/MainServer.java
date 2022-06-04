@@ -20,7 +20,7 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class Main {
+public class MainServer {
     public static void main(String[] args) {
         FileWorker fileWorker;
         try {
@@ -60,40 +60,40 @@ public class Main {
         FileWorker finalFileWorker = fileWorker;
 
 
-        Runtime.getRuntime().addShutdownHook(new Thread() {
-            public void run() {
-                try {
-                    finalFileWorker.saveFile(JSONParser.toJSON(collectionManager.getCollection()));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+//        Runtime.getRuntime().addShutdownHook(new Thread() {
+//            public void run() {
+//                try {
+//                    finalFileWorker.saveFile(JSONParser.toJSON(collectionManager.getCollection()));
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
+//
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                while (true) {
+//                    Console console = System.console();
+//                    String input = null;
+//                    try {
+//                        input = console.readLine().trim();
+//                        if (input.equalsIgnoreCase("save")) {
+//                            new SaveCommand(collectionManager, finalFileWorker).execute(null);
+//                        }
+//                        if (input.equalsIgnoreCase("exit")) {
+//                            new ServerExitCommand(collectionManager, finalFileWorker).execute(null);
+//                        }
+//                    } catch (NullPointerException e) {
+//                        System.out.println("\u001B[31mDon't do this!!! Better use exit command\u001B[0m");
+//                        System.out.println("\u001B[32mServer is closing\u001B[0m");
+//                    }
+//                }
+//            }
+//        }).start();
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    Console console = System.console();
-                    String input = null;
-                    try {
-                        input = console.readLine().trim();
-                        if (input.equalsIgnoreCase("save")) {
-                            new SaveCommand(collectionManager, finalFileWorker).execute(null);
-                        }
-                        if (input.equalsIgnoreCase("exit")) {
-                            new ServerExitCommand(collectionManager, finalFileWorker).execute(null);
-                        }
-                    } catch (NullPointerException e) {
-                        System.out.println("\u001B[31mDon't do this!!! Better use exit command\u001B[0m");
-                        System.out.println("\u001B[32mServer is closing\u001B[0m");
-                    }
-                }
-            }
-        }).start();
 
-
-        Server server = new Server(Integer.parseInt(args[0]), commandManagers);
+        Server server = new Server(Integer.parseInt(args[0]), commandManagers, collectionManager);
         server.start();
         server.connect();
 

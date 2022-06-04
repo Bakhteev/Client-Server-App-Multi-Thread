@@ -19,7 +19,7 @@ public class ServerCommandManager {
         return commands;
     }
 
-    public Response executeCommand(Request req) {
+    synchronized public Response executeCommand(Request req) {
         try {
             if (!commands.containsKey(req.getCommand())) {
                 throw new NoSuchCommandException("No such command: " + req.getCommand());
