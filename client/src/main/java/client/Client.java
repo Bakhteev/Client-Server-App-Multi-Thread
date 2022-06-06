@@ -46,28 +46,10 @@ public class Client {
 
 
     public static void setup() {
-//        try {
-//            buffer = ByteBuffer.allocate(10000);
-//            writer = new RequestSender(socket.socket().getOutputStream());
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        try {
-////            reader = new ResponseHandler(socket.socket().getInputStream());
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+
     }
 
     public static void close() {
-//        try {
-//            writer.close();
-//        } catch (IOException e) {
-//        }
-//        try {
-//            reader.close();
-//        } catch (IOException e) {
-//        }
         try {
             socket.close();
         } catch (IOException e) {
@@ -80,8 +62,6 @@ public class Client {
         while (!socket.socket().isConnected()) {
             try {
                 socket = SocketChannel.open(new InetSocketAddress(InetAddress.getByName(host), port));
-//                reader.setReader(socket.socket().getInputStream());
-//                writer.setWriter(socket.socket().getOutputStream());
                 ConsoleWorker.println("\u001B[32mReconnection completed successfully. Continuation of execution.\u001B[0m");
                 return;
             } catch (IOException e) {
@@ -132,9 +112,8 @@ public class Client {
     public static void sendRequest(Request req) {
         byte[] bytes = Serializator.serializeObject(req);
         try {
-            buffer = ByteBuffer.wrap(bytes);
+            ByteBuffer buffer = ByteBuffer.wrap(bytes);
             socket.write(buffer);
-            buffer.clear();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -142,18 +121,9 @@ public class Client {
 
     public static Response getResponse() {
         try {
-            buffer.clear();
-//            System.out.println(Arrays.toString(buffer.array()));
-            buffer.flip();
-            while (socket.read(buffer) > 0) {
-//                socket.read(buffer);
-//                socket.read(buffer);
-            }
-            System.out.println(Arrays.toString(buffer.array()));
-//            buffer.flip();
-            Response response = Serializator.deserializeObject(buffer.array());
-            System.out.println(response);
-            buffer.clear();
+            ByteBuffer buf = ByteBuffer.allocate(10000);
+            while (socket.read(buf) <= 0) {}
+            Response response = Serializator.deserializeObject(buf.array());
             return response;
         } catch (IOException e) {
             e.printStackTrace();

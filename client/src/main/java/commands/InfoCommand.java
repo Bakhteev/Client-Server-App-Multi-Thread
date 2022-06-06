@@ -1,5 +1,6 @@
 package commands;
 
+import client.Client;
 import communicate.RequestSender;
 import communicate.ResponseHandler;
 import interaction.Request;
@@ -8,7 +9,7 @@ import workers.ConsoleWorker;
 
 import java.io.IOException;
 
-public class InfoCommand extends AbstractCommand{
+public class InfoCommand extends AbstractCommand {
     RequestSender writer;
     ResponseHandler reader;
 
@@ -22,18 +23,15 @@ public class InfoCommand extends AbstractCommand{
     @Override
     public boolean execute(String argument) {
         try {
-            if (!argument.isEmpty()){
+            if (!argument.isEmpty()) {
                 throw new IllegalArgumentException("Using of command: " + getName());
             }
-        }catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             ConsoleWorker.printError(e.getMessage());
             return false;
         }
-        try {
-            writer.sendRequest(new Request<>(getName()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Client.sendRequest(new Request<>(getName()));
+
         return result(reader);
     }
 }
