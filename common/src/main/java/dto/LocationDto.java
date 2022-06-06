@@ -5,6 +5,7 @@ import lombok.Getter;
 import java.io.Serializable;
 @Getter
 public class LocationDto implements Serializable {
+    private static final long serialVersionUID = 8907133915389167294L;
     private Long x; //Поле не может быть null
     private int y;
     private Float z; //Поле не может быть null

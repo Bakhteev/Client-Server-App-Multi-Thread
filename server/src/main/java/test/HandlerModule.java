@@ -9,7 +9,7 @@ import java.util.LinkedList;
 
 public class HandlerModule implements Runnable {
     Socket client;
-    public static LinkedList<Request> list;
+    public static LinkedList<Request> list = new LinkedList<>();
     RequestHandlerModule in;
 
     public HandlerModule(Socket client, RequestHandlerModule in) {
@@ -25,7 +25,7 @@ public class HandlerModule implements Runnable {
                 System.out.println(req + " : " + Thread.currentThread().getName());
                 list.add(req);
                 System.out.println(list);
-                break;
+//                return;
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();

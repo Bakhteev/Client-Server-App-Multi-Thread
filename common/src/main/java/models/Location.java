@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 @Setter
 public class Location implements Serializable {
+    private static final long serialVersionUID = -2236119481629483653L;
     private int id;
     private Long x; //Поле не может быть null
     private int y;

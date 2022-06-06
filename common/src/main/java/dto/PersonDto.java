@@ -13,6 +13,7 @@ import java.io.Serializable;
 @Setter
 @Getter
 public class PersonDto implements Serializable {
+    private static final long serialVersionUID = 8888793084928896959L;
     private String name = null; //Поле не может быть null, Строка не может быть пустой
     private CoordinatesDto coordinatesDto = null; //Поле не может быть null
     private Long height = null; //Поле не может быть null, Значение поля должно быть больше 0

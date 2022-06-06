@@ -3,13 +3,18 @@ package client;
 import commands.*;
 import communicate.RequestSender;
 import communicate.ResponseHandler;
+import interaction.Request;
+import interaction.Response;
 import managers.ClientCommandManager;
+import utils.Serializator;
 import workers.ConsoleWorker;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
+import java.util.Arrays;
 
 public class Client {
     private static int port;
@@ -17,6 +22,7 @@ public class Client {
     private static SocketChannel socket;
     private static RequestSender writer;
     private static ResponseHandler reader;
+    private static ByteBuffer buffer = ByteBuffer.allocate(10000);
 
 
     public Client(String host, int port) {
@@ -40,27 +46,28 @@ public class Client {
 
 
     public static void setup() {
-        try {
-            writer = new RequestSender(socket.socket().getOutputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            reader = new ResponseHandler(socket.socket().getInputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            buffer = ByteBuffer.allocate(10000);
+//            writer = new RequestSender(socket.socket().getOutputStream());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        try {
+////            reader = new ResponseHandler(socket.socket().getInputStream());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public static void close() {
-        try {
-            writer.close();
-        } catch (IOException e) {
-        }
-        try {
-            reader.close();
-        } catch (IOException e) {
-        }
+//        try {
+//            writer.close();
+//        } catch (IOException e) {
+//        }
+//        try {
+//            reader.close();
+//        } catch (IOException e) {
+//        }
         try {
             socket.close();
         } catch (IOException e) {
@@ -73,8 +80,8 @@ public class Client {
         while (!socket.socket().isConnected()) {
             try {
                 socket = SocketChannel.open(new InetSocketAddress(InetAddress.getByName(host), port));
-                reader.setReader(socket.socket().getInputStream());
-                writer.setWriter(socket.socket().getOutputStream());
+//                reader.setReader(socket.socket().getInputStream());
+//                writer.setWriter(socket.socket().getOutputStream());
                 ConsoleWorker.println("\u001B[32mReconnection completed successfully. Continuation of execution.\u001B[0m");
                 return;
             } catch (IOException e) {
@@ -92,7 +99,7 @@ public class Client {
     }
 
     public void run() {
-        while (!getSocket().socket().isOutputShutdown()) {
+        while (true) {
             get();
         }
     }
@@ -120,6 +127,38 @@ public class Client {
 
         commandManager.startInteractiveMode();
 
+    }
+
+    public static void sendRequest(Request req) {
+        byte[] bytes = Serializator.serializeObject(req);
+        try {
+            buffer = ByteBuffer.wrap(bytes);
+            socket.write(buffer);
+            buffer.clear();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static Response getResponse() {
+        try {
+            buffer.clear();
+//            System.out.println(Arrays.toString(buffer.array()));
+            buffer.flip();
+            while (socket.read(buffer) > 0) {
+//                socket.read(buffer);
+//                socket.read(buffer);
+            }
+            System.out.println(Arrays.toString(buffer.array()));
+//            buffer.flip();
+            Response response = Serializator.deserializeObject(buffer.array());
+            System.out.println(response);
+            buffer.clear();
+            return response;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }
 

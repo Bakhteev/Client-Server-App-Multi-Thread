@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 @Getter
 public class Response<T> implements Serializable {
+    private static final long serialVersionUID = 914471404384411682L;
     Status status;
     String message;
     T body;

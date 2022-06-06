@@ -1,5 +1,6 @@
 package commands;
 
+import client.Client;
 import communicate.ResponseHandler;
 import interaction.Request;
 import interaction.Response;
@@ -31,22 +32,21 @@ public abstract class AbstractCommand {
     }
 
     public boolean result(ResponseHandler reader) {
-        try {
-            Response res = reader.readResponse();
-            if (res.getStatus() == Response.Status.FAILURE) {
-                ConsoleWorker.printError(res.getMessage());
-                return false;
-            }
-            ConsoleWorker.println((String) res.getBody());
-            return true;
-        } catch (IOException | ClassNotFoundException e) {
-            ConsoleWorker.printError("Something went wrong :3");
+//        try {
+        Response res = Client.getResponse();
+        if (res.getStatus() == Response.Status.FAILURE) {
+            ConsoleWorker.printError(res.getMessage());
             return false;
         }
+        ConsoleWorker.println((String) res.getBody());
+        return true;
+//        } catch (IOException | ClassNotFoundException e) {
+//            ConsoleWorker.printError("Something went wrong :3");
+//            return false;
+//        }
     }
 
     abstract public boolean execute(String argument);
-
 
 
 }

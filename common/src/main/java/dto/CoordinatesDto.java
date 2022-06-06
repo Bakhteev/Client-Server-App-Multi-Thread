@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 @Getter
 public class CoordinatesDto implements Serializable {
+    private static final long serialVersionUID = 2655400176129627807L;
     private Integer x; //Поле не может быть null
     private int y; //Максимальное значение поля: 988
 

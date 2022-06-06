@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 @Setter
 public class Coordinates implements Serializable {
+    private static final long serialVersionUID = -6915628691877313725L;
     private int id;
     private Integer x; //Поле не может быть null
     private int y; //Максимальное значение поля: 988
