@@ -6,7 +6,7 @@
 //import managers.LinkedListCollectionManager;
 //import models.Person;
 //import utils.PersonFormatter;
-//import validators.PersonValidator;
+//
 //
 //public class AddCommand extends AbstractCommand {
 //    LinkedListCollectionManager collectionManager;
@@ -19,18 +19,21 @@
 //    @Override
 //    public Response execute(Request req) {
 //        PersonDto dto = (PersonDto) req.getBody();
-//        PersonValidator.checkDtoFields(dto);
-//        Person person = new Person(
-//                dto.getName(),
-//                dto.getCoordinates(),
-//                dto.getHeight(),
-//                dto.getWeight(),
-//                dto.getEyesColor(),
-//                dto.getHairsColor(),
-//                dto.getLocation()
-//        );
+//        dto.setOwnerId(req.getAuthorization());
+////        Person person = new Person(
+////                1,
+////                dto.getName(),
+////                dto.getCoordinatesDto(),
+////                dto.getHeight(),
+////                dto.getWeight(),
+////                dto.getEyesColor(),
+////                dto.getHairsColor(),
+////                dto.getLocationDto(),
+////                1
+////        );
+//
 //        try {
-//            collectionManager.add(person);
+////            collectionManager.add(person);
 //            System.out.println("Person has successfully added");
 //            return new Response<>(Response.Status.COMPLETED, "", PersonFormatter.format(person) + "\nPerson has successfully added");
 //        } catch (SecurityException e) {

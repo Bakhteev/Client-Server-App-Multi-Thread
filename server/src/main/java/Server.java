@@ -71,8 +71,6 @@ public class Server {
 
         ExecutorService handler = Executors.newFixedThreadPool(10);
         ExecutorService executor = Executors.newCachedThreadPool();
-        ExecutorService sandler = Executors.newFixedThreadPool(10);
-
         try {
             Selector selector = Selector.open();
             serverSocketChannel.configureBlocking(false);
@@ -101,8 +99,10 @@ public class Server {
                             Request request = future.get();
                             Future<Response> responseFuture = executor.submit(() -> commandManager.executeCommand(request));
                             responseMap.put(client, responseFuture.get());
-                            client.configureBlocking(false);
-                            client.register(key.selector(), OP_WRITE);
+                            if (key.isValid()) {
+                                client.configureBlocking(false);
+                                client.register(key.selector(), OP_WRITE);
+                            }
                         }
                         if (key.isWritable()) {
                             SocketChannel client = (SocketChannel) key.channel();
@@ -120,8 +120,10 @@ public class Server {
                                     }
                                 }
                             }).start();
-                            client.configureBlocking(false);
-                            client.register(key.selector(), OP_READ);
+                            if (key.isValid()) {
+                                client.configureBlocking(false);
+                                client.register(key.selector(), OP_READ);
+                            }
                         }
                         iterator.remove();
                     }
@@ -130,7 +132,6 @@ public class Server {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
 }

@@ -1,5 +1,6 @@
 package commands;
 
+import client.Client;
 import communicate.RequestSender;
 import communicate.ResponseHandler;
 import interaction.Request;
@@ -29,7 +30,7 @@ public class RemoveFirstCommand extends AbstractCommand {
             return false;
         }
         try {
-            writer.sendRequest(new Request<>(getName()));
+            Client.sendRequest(new Request<>(getName()));
         } catch (IOException e) {
             e.printStackTrace();
         }

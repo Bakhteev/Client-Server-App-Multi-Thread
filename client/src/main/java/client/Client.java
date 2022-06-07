@@ -92,30 +92,32 @@ public class Client {
                 new InfoCommand(writer, reader),
                 new CountByHeightCommand(writer, reader),
                 new PrintDescendingCommand(writer, reader),
-//                new AddCommand(writer, reader, commandManager),
-//                new UpdateCommand(writer, reader, commandManager),
+                new AddCommand(writer, reader, commandManager),
+                new UpdateCommand(writer, reader, commandManager),
                 new ShowCommand(writer, reader),
                 new ClearCommand(writer, reader),
-//                new RemoveGreaterCommand(writer, reader, commandManager),
+                new RemoveGreaterCommand(writer, reader, commandManager),
                 new RemoveFirstCommand(writer, reader),
                 new RemoveByIdCommand(writer, reader),
                 new PrintUniqueLocationCommand(writer, reader),
                 new ExecuteScriptCommand(commandManager),
                 new ExitCommand(writer, reader),
-//                new AddIfMinCommand(writer, reader, commandManager)
+                new AddIfMinCommand(writer, reader, commandManager)
         });
 
         commandManager.startInteractiveMode();
 
     }
 
-    public static void sendRequest(Request req) {
+    public static void sendRequest(Request req) throws IOException {
         byte[] bytes = Serializator.serializeObject(req);
         try {
             ByteBuffer buffer = ByteBuffer.wrap(bytes);
             socket.write(buffer);
         } catch (IOException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
+            waitConnection();
+            sendRequest(req);
         }
     }
 

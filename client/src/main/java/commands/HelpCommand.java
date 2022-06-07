@@ -33,7 +33,11 @@ public class HelpCommand extends AbstractCommand {
             return false;
         }
         //            writer.sendRequest(new Request<>(getName()));
-        Client.sendRequest(new Request<>(getName()));
+        try {
+            Client.sendRequest(new Request<>(getName()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return result(reader);
     }
 }

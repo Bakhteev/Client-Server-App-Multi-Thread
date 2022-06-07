@@ -11,6 +11,7 @@ public class Request<T> implements Serializable {
     private static final long serialVersionUID = -3750791637366915264L;
     String command;
     String params;
+    int Authorization;
     @Setter
     T body;
 

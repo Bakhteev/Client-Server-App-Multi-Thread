@@ -30,7 +30,11 @@ public class InfoCommand extends AbstractCommand {
             ConsoleWorker.printError(e.getMessage());
             return false;
         }
-        Client.sendRequest(new Request<>(getName()));
+        try {
+            Client.sendRequest(new Request<>(getName()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         return result(reader);
     }

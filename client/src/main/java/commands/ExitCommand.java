@@ -29,7 +29,7 @@ public class ExitCommand extends AbstractCommand {
             return false;
         }
         try {
-            writer.sendRequest(new Request<>(getName()));
+            Client.sendRequest(new Request<>(getName()));
         } catch (IOException e) {
             e.printStackTrace();
         }

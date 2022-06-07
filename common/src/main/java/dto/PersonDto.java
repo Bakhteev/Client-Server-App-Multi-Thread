@@ -27,7 +27,7 @@ public class PersonDto implements Serializable {
     }
 
     public PersonDto(String name, CoordinatesDto coordinatesDto, Long height, float weight, EyesColor eyesColor,
-                     HairsColor hairsColor, LocationDto locationDto,int ownerId) throws IllegalArgumentException {
+                     HairsColor hairsColor, LocationDto locationDto) throws IllegalArgumentException {
         this.name = name;
         this.coordinatesDto = coordinatesDto;
         this.height = height;
@@ -35,7 +35,6 @@ public class PersonDto implements Serializable {
         this.eyesColor = eyesColor;
         this.hairsColor = hairsColor;
         this.locationDto = locationDto;
-        this.ownerId = ownerId;
     }
 
     @Override

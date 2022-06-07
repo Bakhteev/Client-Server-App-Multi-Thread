@@ -32,29 +32,27 @@ public class MainServer {
         LinkedListCollectionManager collectionManager = new LinkedListCollectionManager();
         collectionManager.loadCollection((jsonParser.JSONParse(fileWorker.readFile(), Person[].class)));
 
-        ServerCommandManager[] commandManagers = new ServerCommandManager[]{new ServerCommandManager(),new ServerCommandManager(),
-                new ServerCommandManager()};
+        ServerCommandManager commandManager = new ServerCommandManager();
 
-        for (ServerCommandManager commandManager : commandManagers){
-            commandManager.addCommands(new AbstractCommand[]{
-                    new HelpCommand(commandManager),
-                    new InfoCommand(collectionManager),
-                    new ShowCommand(collectionManager.getCollection()),
+        commandManager.addCommands(new AbstractCommand[]{
+                new HelpCommand(commandManager),
+                new InfoCommand(collectionManager),
+                new ShowCommand(collectionManager.getCollection()),
 //                new AddCommand(collectionManager),
-                    new UpdateCommand(collectionManager),
-                    new RemoveByIdCommand(collectionManager),
+                new UpdateCommand(collectionManager),
+                new RemoveByIdCommand(collectionManager),
 //                new AddIfMinCommand(collectionManager),
-                    new ExitCommand(),
-                    new ExecuteScriptCommand(),
-                    new ClearCommand(collectionManager),
+                new ExitCommand(),
+                new ExecuteScriptCommand(),
+                new ClearCommand(collectionManager),
 //                new RemoveGreaterCommand(collectionManager),
-                    new PrintDescendingCommand(collectionManager.getCollection()),
-                    new PrintUniqueLocationCommand(collectionManager.getCollection()),
-                    new CountByHeightCommand(collectionManager.getCollection()),
-                    new RemoveFirstCommand(collectionManager),
-            });
-        }
-//        ServerCommandManager commandManager = new ServerCommandManager();
+                new PrintDescendingCommand(collectionManager.getCollection()),
+                new PrintUniqueLocationCommand(collectionManager.getCollection()),
+                new CountByHeightCommand(collectionManager.getCollection()),
+                new RemoveFirstCommand(collectionManager),
+        });
+
+
 
 
         FileWorker finalFileWorker = fileWorker;
@@ -97,16 +95,7 @@ public class MainServer {
         server.start();
         server.connect();
 
-//        String url = "jdbc:postgresql://localhost:5432/lab7";
-//        Connection connection = null;
-//        try {
-//            Class.forName("org.postgresql.Driver");
-//            connection = DriverManager.getConnection(url, "postgres", "323694m");
-//            System.out.println("Connection OK");
-//        } catch (SQLException | ClassNotFoundException e) {
-//            e.printStackTrace();
-//            System.out.println("Connection ERROR");
-//        }
+//
 //
 //        assert connection != null;
 //        String sqlReqInit =
@@ -191,11 +180,7 @@ public class MainServer {
 //            e.printStackTrace();
 //        }
 //
-//        LocationDao locationDao = new LocationDao(connection);
-//        CoordinatesDao coordinatesDao = new CoordinatesDao(connection);
-//        PersonDao personDao = new PersonDao(connection, locationDao, coordinatesDao);
-//        UsersDao usersDao = new UsersDao(connection);
-//        Authentication auth = new Authentication(usersDao);
+
 
 //        personDao.getById("1");
 

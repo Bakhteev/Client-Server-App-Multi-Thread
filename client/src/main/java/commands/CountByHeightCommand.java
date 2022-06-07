@@ -1,5 +1,6 @@
 package commands;
 
+import client.Client;
 import communicate.RequestSender;
 import communicate.ResponseHandler;
 import interaction.Request;
@@ -32,7 +33,7 @@ public class CountByHeightCommand extends AbstractCommand {
             return false;
         }
         try {
-            writer.sendRequest(new Request<>(getName(), argument));
+            Client.sendRequest(new Request<>(getName(), argument));
         } catch (IOException e) {
             e.printStackTrace();
         }
