@@ -2,21 +2,18 @@ package commands;
 
 import auth.Auth;
 import client.Client;
-import communicate.RequestSender;
-import communicate.ResponseHandler;
+
 import interaction.Request;
 import workers.ConsoleWorker;
 
 import java.io.IOException;
 
 public class ShowCommand extends AbstractCommand {
-    RequestSender writer;
-    ResponseHandler reader;
 
-    public ShowCommand(RequestSender writer, ResponseHandler reader) {
+
+    public ShowCommand() {
         super("show", "print to standard output all elements of the collection in string representation.", "");
-        this.writer = writer;
-        this.reader = reader;
+
     }
 
     @Override
@@ -34,6 +31,6 @@ public class ShowCommand extends AbstractCommand {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return result(reader);
+        return result();
     }
 }

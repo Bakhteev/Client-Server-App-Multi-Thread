@@ -2,32 +2,25 @@ package modules;
 
 import interaction.Request;
 import lombok.Getter;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
+import utils.Serializator;
+import java.nio.ByteBuffer;
+import java.nio.channels.SocketChannel;
 import java.util.concurrent.Callable;
 
 @Getter
 public class RequestHandlerModule implements Callable<Request> {
-    private final ObjectInputStream reader;
 
-    public RequestHandlerModule(InputStream input) throws IOException {
-        this.reader = new ObjectInputStream(input);
-    }
+    SocketChannel client;
 
-    public Request<?> readRequest() throws IOException, ClassNotFoundException {
-        return (Request<?>) reader.readObject();
-    }
-
-    public void close() throws IOException {
-        reader.close();
+    public RequestHandlerModule(SocketChannel client) {
+        this.client = client;
     }
 
     @Override
     public Request call() throws Exception {
 
-        return  readRequest();
-//        return null;
+        ByteBuffer buffer = ByteBuffer.allocate(5000);
+        client.read(buffer);
+        return Serializator.deserializeObject(buffer.array());
     }
 }

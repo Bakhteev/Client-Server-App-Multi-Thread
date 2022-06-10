@@ -1,4 +1,4 @@
-package commands; // TODO: Think how to do this, ADD LOGGER
+package commands;
 
 import interaction.Request;
 import interaction.Response;

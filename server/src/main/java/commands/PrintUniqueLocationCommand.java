@@ -1,25 +1,18 @@
 package commands;
-
-//TODO: ADD LOGGER
-
 import interaction.Request;
 import interaction.Response;
 import managers.DaoManager;
 import models.Location;
-import models.Person;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 public class PrintUniqueLocationCommand extends AbstractCommand {
 
-    LinkedList<Person> collection;
 
-    public PrintUniqueLocationCommand(LinkedList<Person> collection) {
+    public PrintUniqueLocationCommand() {
         super("print_unique_location", "display the unique values of the location field of all elements in the collection.", "");
-        this.collection = collection;
     }
 
     @Override
@@ -32,7 +25,6 @@ public class PrintUniqueLocationCommand extends AbstractCommand {
                 throw new IllegalStateException("Collection is empty");
             }
         } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
             return new Response<>(Response.Status.FAILURE, e.getMessage());
         }
         HashMap<String, Integer> map = countLocations(daoManager);

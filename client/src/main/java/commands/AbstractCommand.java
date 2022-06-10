@@ -1,12 +1,10 @@
 package commands;
 
 import client.Client;
-import communicate.ResponseHandler;
-import interaction.Request;
+
 import interaction.Response;
 import workers.ConsoleWorker;
 
-import java.io.IOException;
 
 public abstract class AbstractCommand {
     private String name;
@@ -31,8 +29,7 @@ public abstract class AbstractCommand {
         return params;
     }
 
-    public boolean result(ResponseHandler reader) {
-//        try {
+    public boolean result() {
         Response res = Client.getResponse();
         if (res.getStatus() == Response.Status.FAILURE) {
             ConsoleWorker.printError(res.getMessage());
@@ -40,10 +37,7 @@ public abstract class AbstractCommand {
         }
         ConsoleWorker.println((String) res.getBody());
         return true;
-//        } catch (IOException | ClassNotFoundException e) {
-//            ConsoleWorker.printError("Something went wrong :3");
-//            return false;
-//        }
+
     }
 
     abstract public boolean execute(String argument);

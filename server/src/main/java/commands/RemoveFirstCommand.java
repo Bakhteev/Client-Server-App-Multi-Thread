@@ -1,19 +1,15 @@
 package commands;
-// TODO: ADD LOGGER
 
 import dao.PersonDao;
 import interaction.Request;
 import interaction.Response;
 import managers.DaoManager;
-import managers.LinkedListCollectionManager;
 import models.Person;
 
 public class RemoveFirstCommand extends AbstractCommand {
-    LinkedListCollectionManager collectionManager;
 
-    public RemoveFirstCommand(LinkedListCollectionManager collectionManager) {
+    public RemoveFirstCommand() {
         super("remove_first", "remove first element of collection", "");
-        this.collectionManager = collectionManager;
     }
 
     @Override

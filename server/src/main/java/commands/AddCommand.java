@@ -4,17 +4,12 @@ import dto.PersonDto;
 import interaction.Request;
 import interaction.Response;
 import managers.DaoManager;
-import managers.LinkedListCollectionManager;
-import models.Person;
-import utils.PersonFormatter;
 
 
 public class AddCommand extends AbstractCommand {
-    LinkedListCollectionManager collectionManager;
 
-    public AddCommand(LinkedListCollectionManager collectionManager) {
+    public AddCommand() {
         super("add", "add a new element to the collection.", "{element}");
-        this.collectionManager = collectionManager;
     }
 
     @Override

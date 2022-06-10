@@ -1,24 +1,14 @@
 package commands;
 
-// TODO: ADD LOGGER
 
 import interaction.Request;
 import interaction.Response;
 import managers.DaoManager;
-import managers.LinkedListCollectionManager;
-import managers.UserManager;
-
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 
 public class InfoCommand extends AbstractCommand {
-    LinkedListCollectionManager collectionManager;
 
-    public InfoCommand(LinkedListCollectionManager collectionManager) {
+    public InfoCommand() {
         super("info", "print information about the collection to standard output.", "");
-        this.collectionManager = collectionManager;
     }
 
     @Override

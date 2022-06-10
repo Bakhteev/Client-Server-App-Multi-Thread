@@ -10,12 +10,10 @@ import models.Person;
 import java.util.LinkedList;
 
 public class CountByHeightCommand extends AbstractCommand {
-    LinkedList<Person> collection;
 
-    public CountByHeightCommand(LinkedList<Person> collection) {
+    public CountByHeightCommand() {
         super("count_by_height", "display the number of elements whose height field value is equal to the given one.",
                 "height");
-        this.collection = collection;
     }
 
 

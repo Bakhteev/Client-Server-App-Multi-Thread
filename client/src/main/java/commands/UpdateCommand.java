@@ -2,8 +2,7 @@ package commands;
 
 import auth.Auth;
 import client.Client;
-import communicate.RequestSender;
-import communicate.ResponseHandler;
+
 import dto.PersonDto;
 import interaction.Request;
 import maker.PersonMaker;
@@ -13,15 +12,11 @@ import workers.ConsoleWorker;
 import java.io.IOException;
 
 public class UpdateCommand extends AbstractCommand {
-    RequestSender writer;
-    ResponseHandler reader;
     ClientCommandManager commandManager;
 
-    public UpdateCommand(RequestSender writer, ResponseHandler reader, ClientCommandManager commandManager) {
+    public UpdateCommand(ClientCommandManager commandManager) {
         super("update", "update the value of the collection element whose id is equal to the given one.",
                 "id {element}");
-        this.writer = writer;
-        this.reader = reader;
         this.commandManager = commandManager;
     }
 
@@ -48,6 +43,6 @@ public class UpdateCommand extends AbstractCommand {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return result(reader);
+        return result();
     }
 }

@@ -10,19 +10,22 @@ public class ConnectionManager {
     Queue<Connection> connectionQueue = new LinkedList<>();
     int CONNECTION_POOL_SIZE = 10;
 
-    public void init(){
-        while (connectionQueue.size() <= CONNECTION_POOL_SIZE){
+    public int getSize() {
+        return connectionQueue.size();
+    }
+
+    public void init() {
+        while (connectionQueue.size() < CONNECTION_POOL_SIZE) {
             connectionQueue.add(connect());
         }
     }
 
-    private Connection connect(){
-        String url = "jdbc:postgresql://localhost:5432/lab7";
+    private Connection connect() {
+        String url = "jdbc:postgresql://pg:5432/studs";
         Connection connection = null;
         try {
             Class.forName("org.postgresql.Driver");
-            connection = DriverManager.getConnection(url, "postgres", "323694m");
-            System.out.println("Connection OK");
+            connection = DriverManager.getConnection(url, "s336207", "bxf054");
             return connection;
         } catch (SQLException | ClassNotFoundException e) {
             e.printStackTrace();
@@ -31,11 +34,11 @@ public class ConnectionManager {
         }
     }
 
-    public Connection getConnection(){
+    public Connection getConnection() {
         return connectionQueue.poll();
     }
 
-    public void addConnection(Connection connection){
+    public void addConnection(Connection connection) {
         connectionQueue.add(connection);
     }
 }

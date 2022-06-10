@@ -2,22 +2,17 @@ package commands;
 
 import auth.Auth;
 import client.Client;
-import communicate.RequestSender;
-import communicate.ResponseHandler;
+
 import interaction.Request;
-import interaction.Response;
 import workers.ConsoleWorker;
 
 import java.io.IOException;
 
 public class PrintDescendingCommand extends AbstractCommand {
-    RequestSender writer;
-    ResponseHandler reader;
 
-    public PrintDescendingCommand(RequestSender writer, ResponseHandler reader) {
+    public PrintDescendingCommand() {
         super("print_descending", "display the elements of the collection in descending order.", "");
-        this.writer = writer;
-        this.reader = reader;
+
     }
 
     @Override
@@ -36,6 +31,6 @@ public class PrintDescendingCommand extends AbstractCommand {
             e.printStackTrace();
             return false;
         }
-        return result(reader);
+        return result();
     }
 }

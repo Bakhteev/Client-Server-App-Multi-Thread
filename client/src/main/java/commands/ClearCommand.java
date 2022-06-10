@@ -2,21 +2,18 @@ package commands;
 
 import auth.Auth;
 import client.Client;
-import communicate.RequestSender;
-import communicate.ResponseHandler;
+
 import interaction.Request;
 import workers.ConsoleWorker;
 
 import java.io.IOException;
 
 public class ClearCommand extends AbstractCommand {
-    RequestSender writer;
-    ResponseHandler reader;
 
-    public ClearCommand(RequestSender writer, ResponseHandler reader) {
+
+    public ClearCommand() {
         super("clear", "clears collection", "");
-        this.writer = writer;
-        this.reader = reader;
+
     }
 
 
@@ -31,11 +28,10 @@ public class ClearCommand extends AbstractCommand {
             return false;
         }
         try {
-//            writer.sendRequest(new Request<>(getName()));
             Client.sendRequest(new Request<>(getName(), Auth.authHeader));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return result(reader);
+        return result();
     }
 }

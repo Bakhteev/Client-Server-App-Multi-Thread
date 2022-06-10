@@ -4,7 +4,7 @@ import interaction.Request;
 import interaction.Response;
 import managers.DaoManager;
 import managers.ServerCommandManager;
-//TODO: ADD LOGGER, DO SMT WITH CONSOLECLIENT
+
 
 public class HelpCommand extends AbstractCommand {
     ServerCommandManager commandManager;

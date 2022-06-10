@@ -1,19 +1,15 @@
 package commands;
 
-// TODO: ADD LOGGER
 
 import interaction.Request;
 import interaction.Response;
 import managers.DaoManager;
-import managers.LinkedListCollectionManager;
 import models.Person;
 
 public class RemoveByIdCommand extends AbstractCommand {
-    LinkedListCollectionManager collectionManager;
 
-    public RemoveByIdCommand(LinkedListCollectionManager collectionManager) {
+    public RemoveByIdCommand() {
         super("remove_by_id", "remove element from collection by its id.", "id");
-        this.collectionManager = collectionManager;
     }
 
     @Override

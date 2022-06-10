@@ -40,8 +40,6 @@ public class Authentication {
             messageDigest.update(password.getBytes());
             digest = messageDigest.digest();
         } catch (NoSuchAlgorithmException e) {
-            // тут можно обработать ошибку
-            // возникает она если в передаваемый алгоритм в getInstance(,,,) не существует
             e.printStackTrace();
         }
 
@@ -59,7 +57,6 @@ public class Authentication {
         User user = usersDao.getByLogin(dto.getLogin());
         if (user == null) {
             throw new IllegalArgumentException("You have not registered yet");
-//            return false;
         }
 
         if (comparePasswords(dto.getPassword(), user)) {

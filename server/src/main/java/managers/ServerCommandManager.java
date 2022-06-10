@@ -28,6 +28,9 @@ public class ServerCommandManager {
             if(req.getAuthorization() == null){
                 return new Response(Response.Status.FAILURE, "Unauthorized");
             }
+            if (daoManager.connection == null){
+                return new Response(Response.Status.FAILURE, "no connection for u");
+            }
             return commands.get(req.getCommand()).execute(req, daoManager);
         } catch (NoSuchCommandException e) {
             return new Response<>(Response.Status.FAILURE, e.getMessage());

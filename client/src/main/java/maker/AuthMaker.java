@@ -17,7 +17,7 @@ public class AuthMaker {
         while (true) {
             try {
 
-            login = console.readLine().trim();
+            login = console.readLine("Enter login: ").trim();
             AuthValidator.validateLogin(login);
             return login;
             }catch (Throwable e){
@@ -27,12 +27,16 @@ public class AuthMaker {
     }
 
     public String askPassword(){
-        String password;
+        char[] passwordFromChar;
+        StringBuilder password = new StringBuilder();
         while (true) {
             try {
-                password = console.readLine().trim();
-                AuthValidator.validatePassword(password);
-                return password;
+                passwordFromChar = console.readPassword("Enter password: ");
+                for (int i = 0; i < passwordFromChar.length; i++){
+                    password.append(passwordFromChar[i]);
+                }
+                AuthValidator.validatePassword(password.toString());
+                return password.toString();
             }catch (Throwable e){
                 System.out.println(e);
             }

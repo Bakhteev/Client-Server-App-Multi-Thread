@@ -27,7 +27,6 @@ public class PersonDao implements DAO<Person> {
     final private String deletePersonByIdQuery = "DELETE FROM Persons WHERE id=?";
     final private String getAllPersonsByOwnerIdQuery = "SELECT * FROM Persons WHERE ownerId = ?";
     final private String deleteAllPersonsByOwnerIdQuery = "DELETE FROM Persons WHERE ownerId = ?";
-    final private String deletePersonsByOwnerIdQuery = "DELETE FROM Persons WHERE ownerId = ?";
     final private String getNumberOfPersonsQuery = "SELECT COUNT(*) FROM Persons;";
     final private String getNumberOfPersonsByOwnerId = "SELECT COUNT(*) FROM Persons WHERE ownerId = ?";
 
@@ -344,7 +343,6 @@ public class PersonDao implements DAO<Person> {
             if (autoCommit) {
                 setAutoCommit();
             }
-//        Person personToDelete = getById(id);
             List<Person> listOfPerson = getAllByOwnerId(ownerId);
             if (listOfPerson.isEmpty()) {
                 throw new IllegalArgumentException("You have no elements to delete");

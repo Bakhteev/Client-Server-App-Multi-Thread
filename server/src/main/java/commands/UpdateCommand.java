@@ -6,17 +6,14 @@ import exceptions.PersonNotFoundException;
 import interaction.Request;
 import interaction.Response;
 import managers.DaoManager;
-import managers.LinkedListCollectionManager;
 import models.Person;
 import utils.PersonFormatter;
 
 public class UpdateCommand extends AbstractCommand {
-    private LinkedListCollectionManager collectionManager;
 
-    public UpdateCommand(LinkedListCollectionManager collectionManager) {
+    public UpdateCommand() {
         super("update", "update the value of the collection element whose id is equal to the given one.",
                 "id {element}");
-        this.collectionManager = collectionManager;
     }
 
     @Override
@@ -26,7 +23,6 @@ public class UpdateCommand extends AbstractCommand {
                 throw new IllegalArgumentException("Using of command :" + getName() + " " + getParameters());
             }
         } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
             return new Response<>(Response.Status.FAILURE, e.getMessage());
         }
         try {

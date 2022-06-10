@@ -26,7 +26,6 @@ public class PersonMaker {
 
     public PersonMaker(Console console) {
         this.console = console;
-//        System.out.println(console.toString());
     }
 
     private void printArgumentSymbol() {
@@ -54,7 +53,6 @@ public class PersonMaker {
             name = convertStringAsArgument(name);
             validator.validateName(name);
             ConsoleWorker.printParam(name);
-//            System.out.println("> " + name);
             return name;
         }
         while (true) {
@@ -79,7 +77,6 @@ public class PersonMaker {
             strX = convertStringAsArgument(strX);
             validator.validateCoordinatesX(strX);
             ConsoleWorker.printParam(strX);
-//            System.out.println("> " + strX);
             return Integer.parseInt(strX);
         }
         while (true) {
@@ -385,7 +382,6 @@ public class PersonMaker {
 
         try {
             if (Fields.valueOf(param.toUpperCase(Locale.ROOT)).equals(Fields.NAME)) {
-//                String name = askPersonName();
                 dto.setName(askPersonName());
             }
             if (Fields.valueOf(param.toUpperCase(Locale.ROOT)).equals(Fields.COORDINATES)) {

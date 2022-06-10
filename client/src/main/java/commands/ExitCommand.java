@@ -2,21 +2,18 @@ package commands;
 
 import auth.Auth;
 import client.Client;
-import communicate.RequestSender;
-import communicate.ResponseHandler;
+
 import interaction.Request;
 import workers.ConsoleWorker;
 
 import java.io.IOException;
 
 public class ExitCommand extends AbstractCommand {
-    RequestSender writer;
-    ResponseHandler reader;
 
-    public ExitCommand(RequestSender writer, ResponseHandler reader) {
+
+    public ExitCommand() {
         super("exit", "exit client side program without saving collection into file", "");
-        this.writer = writer;
-        this.reader = reader;
+
     }
 
     @Override
@@ -34,7 +31,7 @@ public class ExitCommand extends AbstractCommand {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        result(reader);
+        result();
         ConsoleWorker.println("Good bye");
         Client.close();
         System.exit(-1);

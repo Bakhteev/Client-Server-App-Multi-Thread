@@ -3,15 +3,11 @@ package commands;
 import interaction.Request;
 import interaction.Response;
 import managers.DaoManager;
-import managers.LinkedListCollectionManager;
 
-//TODO: ADD LOGGER
 public class ClearCommand extends AbstractCommand {
-    LinkedListCollectionManager collectionManager;
 
-    public ClearCommand(LinkedListCollectionManager collectionManager) {
+    public ClearCommand() {
         super("clear", "clears collection", "");
-        this.collectionManager = collectionManager;
     }
 
     @Override

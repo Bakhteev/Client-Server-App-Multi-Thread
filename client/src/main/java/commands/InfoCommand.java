@@ -2,22 +2,18 @@ package commands;
 
 import auth.Auth;
 import client.Client;
-import communicate.RequestSender;
-import communicate.ResponseHandler;
+
 import interaction.Request;
-import interaction.Response;
 import workers.ConsoleWorker;
 
 import java.io.IOException;
 
 public class InfoCommand extends AbstractCommand {
-    RequestSender writer;
-    ResponseHandler reader;
 
-    public InfoCommand(RequestSender writer, ResponseHandler reader) {
+
+    public InfoCommand() {
         super("info", "print information about the collection to standard output.", "");
-        this.writer = writer;
-        this.reader = reader;
+
     }
 
 
@@ -37,6 +33,6 @@ public class InfoCommand extends AbstractCommand {
             e.printStackTrace();
         }
 
-        return result(reader);
+        return result();
     }
 }

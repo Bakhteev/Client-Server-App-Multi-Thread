@@ -2,11 +2,8 @@ package commands;
 
 import auth.Auth;
 import client.Client;
-import communicate.RequestSender;
-import communicate.ResponseHandler;
 import dto.PersonDto;
 import interaction.Request;
-import interaction.Response;
 import maker.PersonMaker;
 import managers.ClientCommandManager;
 import workers.ConsoleWorker;
@@ -14,14 +11,11 @@ import workers.ConsoleWorker;
 import java.io.IOException;
 
 public class AddCommand extends AbstractCommand {
-    RequestSender writer;
-    ResponseHandler reader;
+
     ClientCommandManager commandManager;
 
-    public AddCommand(RequestSender writer, ResponseHandler reader, ClientCommandManager commandManager) {
+    public AddCommand(ClientCommandManager commandManager) {
         super("add", "add a new element to the collection.", "{element}");
-        this.writer = writer;
-        this.reader = reader;
         this.commandManager = commandManager;
     }
 
@@ -47,6 +41,6 @@ public class AddCommand extends AbstractCommand {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return result(reader);
+        return result();
     }
 }

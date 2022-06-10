@@ -2,24 +2,20 @@ package commands;
 
 import auth.Auth;
 import client.Client;
-import communicate.RequestSender;
-import communicate.ResponseHandler;
+
 import interaction.Request;
-import interaction.Response;
 import workers.ConsoleWorker;
 
 import java.io.IOException;
 
 public class CountByHeightCommand extends AbstractCommand {
 
-    RequestSender writer;
-    ResponseHandler reader;
 
-    public CountByHeightCommand(RequestSender writer, ResponseHandler reader) {
+
+    public CountByHeightCommand() {
         super("count_by_height", "display the number of elements whose height field value is equal to the given one.",
                 "height");
-        this.writer = writer;
-        this.reader = reader;
+
     }
 
 
@@ -39,6 +35,6 @@ public class CountByHeightCommand extends AbstractCommand {
             e.printStackTrace();
         }
 
-        return result(reader);
+        return result();
     }
 }

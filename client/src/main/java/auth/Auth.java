@@ -6,7 +6,6 @@ import interaction.Request;
 import interaction.Response;
 import lombok.Getter;
 import maker.AuthMaker;
-import managers.ClientCommandManager;
 import workers.ConsoleWorker;
 
 import java.io.IOException;
@@ -32,7 +31,6 @@ public class Auth {
                 Response res = Client.getResponse();
                 if (res.getStatus() == Response.Status.FAILURE) {
                     ConsoleWorker.printError(res.getMessage());
-//                    continue;
                 } else {
                     ConsoleWorker.println(res.getMessage());
                     setAuthenticated();
@@ -58,7 +56,6 @@ public class Auth {
                     ConsoleWorker.printError(res.getMessage());
                 } else {
                     ConsoleWorker.println(res.getMessage());
-//                    setAuthenticated();
                 }
                 return;
             } catch (IOException e) {

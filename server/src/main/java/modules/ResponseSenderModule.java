@@ -2,42 +2,30 @@ package modules;
 
 import interaction.Response;
 import lombok.Getter;
-import lombok.Setter;
+import utils.Serializator;
 
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.util.concurrent.Callable;
+import java.nio.ByteBuffer;
+import java.nio.channels.SocketChannel;
 
 @Getter
 public class ResponseSenderModule implements Runnable {
-    private final ObjectOutputStream writer;
-    @Setter
-    private Response res;
 
-    public ResponseSenderModule(OutputStream writer) throws IOException {
-        this.writer = new ObjectOutputStream(writer);
+    SocketChannel client;
+    Response response;
+
+    public ResponseSenderModule(SocketChannel client, Response response) {
+        this.client = client;
+        this.response = response;
     }
-
-    public void sendResponse(Response<?> response) throws IOException {
-        writer.writeObject(response);
-        writer.flush();
-    }
-
-    public void sendResponse() throws IOException {
-        writer.writeObject(res);
-        writer.flush();
-    }
-
-    public void close() throws IOException {
-        writer.close();
-    }
-
 
     @Override
     public void run() {
+        byte[] output = Serializator.serializeObject(response);
+        ByteBuffer buffer = ByteBuffer.wrap(output);
         try {
-            sendResponse();
+            while (client.write(buffer) > 0) {
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -2,21 +2,18 @@ package commands;
 
 import auth.Auth;
 import client.Client;
-import communicate.RequestSender;
-import communicate.ResponseHandler;
+
 import interaction.Request;
 import workers.ConsoleWorker;
 
 import java.io.IOException;
 
 public class RemoveByIdCommand extends AbstractCommand {
-    RequestSender writer;
-    ResponseHandler reader;
 
-    public RemoveByIdCommand(RequestSender writer, ResponseHandler reader) {
+
+    public RemoveByIdCommand() {
         super("remove_by_id", "remove element from collection by its id.", "id");
-        this.writer = writer;
-        this.reader = reader;
+
     }
 
 
@@ -36,6 +33,6 @@ public class RemoveByIdCommand extends AbstractCommand {
             e.printStackTrace();
         }
 
-        return result(reader);
+        return result();
     }
 }

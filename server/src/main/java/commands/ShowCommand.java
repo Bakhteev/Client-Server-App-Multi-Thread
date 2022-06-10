@@ -4,19 +4,14 @@ import dao.PersonDao;
 import interaction.Request;
 import interaction.Response;
 import managers.DaoManager;
-import models.Person;
 import utils.PersonFormatter;
 
-import java.util.LinkedList;
 
 
-// TODO: ADD LOGGER
 public class ShowCommand extends AbstractCommand {
-    LinkedList<Person> collection;
 
-    public ShowCommand(LinkedList<Person> collection) {
+    public ShowCommand() {
         super("show", "print to standard output all elements of the collection in string representation.", "");
-        this.collection = collection;
     }
 
     @Override

@@ -2,21 +2,18 @@ package commands;
 
 import auth.Auth;
 import client.Client;
-import communicate.RequestSender;
-import communicate.ResponseHandler;
+
 import interaction.Request;
 import workers.ConsoleWorker;
 
 import java.io.IOException;
 
 public class PrintUniqueLocationCommand extends AbstractCommand {
-    RequestSender writer;
-    ResponseHandler reader;
 
-    public PrintUniqueLocationCommand(RequestSender writer, ResponseHandler reader) {
+
+    public PrintUniqueLocationCommand() {
         super("print_unique_location", "display the unique values of the location field of all elements in the collection.", "");
-        this.writer = writer;
-        this.reader = reader;
+
     }
 
     @Override
@@ -34,6 +31,6 @@ public class PrintUniqueLocationCommand extends AbstractCommand {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return result(reader);
+        return result();
     }
 }

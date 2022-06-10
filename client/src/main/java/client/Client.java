@@ -2,8 +2,6 @@ package client;
 
 import auth.Auth;
 import commands.*;
-import communicate.RequestSender;
-import communicate.ResponseHandler;
 import interaction.Request;
 import interaction.Response;
 import maker.AuthMaker;
@@ -16,14 +14,11 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
-import java.util.Arrays;
 
 public class Client {
     private static int port;
     private static String host;
     private static SocketChannel socket;
-    private static RequestSender writer;
-    private static ResponseHandler reader;
     private static ByteBuffer buffer = ByteBuffer.allocate(10000);
 
 
@@ -91,29 +86,29 @@ public class Client {
         Auth auth = new Auth(new AuthMaker(ClientCommandManager.console));
         ClientCommandManager commandManager = new ClientCommandManager();
         commandManager.addCommands(new AbstractCommand[]{
-                new HelpCommand(writer, reader),
-                new InfoCommand(writer, reader),
-                new CountByHeightCommand(writer, reader),
-                new PrintDescendingCommand(writer, reader),
-                new AddCommand(writer, reader, commandManager),
-                new UpdateCommand(writer, reader, commandManager),
-                new ShowCommand(writer, reader),
-                new ClearCommand(writer, reader),
-                new RemoveFirstCommand(writer, reader),
-                new RemoveByIdCommand(writer, reader),
-                new PrintUniqueLocationCommand(writer, reader),
+                new HelpCommand(),
+                new InfoCommand(),
+                new CountByHeightCommand(),
+                new PrintDescendingCommand(),
+                new AddCommand( commandManager),
+                new UpdateCommand( commandManager),
+                new ShowCommand(),
+                new ClearCommand(),
+                new RemoveFirstCommand(),
+                new RemoveByIdCommand(),
+                new PrintUniqueLocationCommand(),
                 new ExecuteScriptCommand(commandManager),
-                new ExitCommand(writer, reader),
+                new ExitCommand(),
         });
         while (!auth.isAuthenticated) {
-            ConsoleWorker.println("login/sign in");
-           String str = ClientCommandManager.console.readLine().trim();
+            ConsoleWorker.println("login/sign up");
+            String str = ClientCommandManager.console.readLine().trim();
             if (str.equals("login")) {
                 auth.login();
-            } else if (str.equals("sign in")) {
+            } else if (str.equals("sign up")) {
                 auth.register();
             } else {
-                System.out.println("fuck u");
+                ConsoleWorker.printError("Type login or sign up!!!");
             }
         }
         commandManager.startInteractiveMode();
@@ -127,7 +122,6 @@ public class Client {
             ByteBuffer buffer = ByteBuffer.wrap(bytes);
             socket.write(buffer);
         } catch (IOException e) {
-//            e.printStackTrace();
             waitConnection();
             sendRequest(req);
         }
@@ -141,7 +135,7 @@ public class Client {
             Response response = Serializator.deserializeObject(buf.array());
             return response;
         } catch (IOException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             return null;
         }
     }

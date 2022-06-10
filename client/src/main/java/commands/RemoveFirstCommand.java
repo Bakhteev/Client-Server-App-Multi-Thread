@@ -2,21 +2,18 @@ package commands;
 
 import auth.Auth;
 import client.Client;
-import communicate.RequestSender;
-import communicate.ResponseHandler;
+
 import interaction.Request;
 import workers.ConsoleWorker;
 
 import java.io.IOException;
 
 public class RemoveFirstCommand extends AbstractCommand {
-    RequestSender writer;
-    ResponseHandler reader;
 
-    public RemoveFirstCommand(RequestSender writer, ResponseHandler reader) {
+
+    public RemoveFirstCommand() {
         super("remove_first", "remove first element of collection", "");
-        this.writer = writer;
-        this.reader = reader;
+
     }
 
 
@@ -35,6 +32,6 @@ public class RemoveFirstCommand extends AbstractCommand {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return result(reader);
+        return result();
     }
 }

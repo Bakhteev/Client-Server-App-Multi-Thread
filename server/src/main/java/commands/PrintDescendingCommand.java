@@ -1,22 +1,17 @@
 package commands;
-// TODO: ADD LOGGER
 
 import comparators.PersonDescendingOrderComparator;
 import interaction.Request;
 import interaction.Response;
 import managers.DaoManager;
-import models.Person;
 import utils.PersonFormatter;
 
-import java.util.LinkedList;
 
 public class PrintDescendingCommand extends AbstractCommand {
 
-    private LinkedList<Person> collection;
 
-    public PrintDescendingCommand(LinkedList<Person> collection) {
+    public PrintDescendingCommand() {
         super("print_descending", "display the elements of the collection in descending order.", "");
-        this.collection = collection;
     }
 
     @Override

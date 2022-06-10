@@ -4,8 +4,6 @@ import dao.CoordinatesDao;
 import dao.LocationDao;
 import dao.PersonDao;
 import lombok.Getter;
-
-import java.nio.channels.SocketChannel;
 import java.sql.Connection;
 
 @Getter
@@ -14,10 +12,8 @@ public class DaoManager {
     public  CoordinatesDao coordinatesDao;
     public  LocationDao locationDao;
     public  PersonDao personDao;
-    public  SocketChannel channel;
 
-    public DaoManager(Connection connection, SocketChannel channel){
-        this.channel = channel;
+    public DaoManager(Connection connection){
         this.connection = connection;
         coordinatesDao = new CoordinatesDao(connection);
         locationDao=new LocationDao(connection);
