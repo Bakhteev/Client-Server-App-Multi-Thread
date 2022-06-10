@@ -34,7 +34,7 @@
     </properties>
 
     <build>
-        <finalName>lab6-server</finalName>
+        <finalName>lab7-server</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -55,7 +55,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>Main</mainClass>
+                            <mainClass>MainServer</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

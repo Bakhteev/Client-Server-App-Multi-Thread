@@ -1,10 +1,8 @@
 package dao;
 
-import dto.PersonDto;
 import models.User;
 
 import java.sql.*;
-import java.util.List;
 
 public class UsersDao {
     private final Connection connection;

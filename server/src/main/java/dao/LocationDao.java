@@ -67,7 +67,6 @@ public class LocationDao implements DAO<Location> {
     public Location create(PersonDto dto) {
         LocationDto locationDto = dto.getLocationDto();
         try {
-//            connection.setAutoCommit(false);
             PreparedStatement statement = connection.prepareStatement(createLocationQuery);
 
             statement.setLong(1, locationDto.getX());
@@ -77,18 +76,10 @@ public class LocationDao implements DAO<Location> {
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
             String id = resultSet.getString(1);
-
-//            connection.commit();
-//            connection.setAutoCommit(true);
-
             return getById(id);
         } catch (SQLException e) {
             e.printStackTrace();
-//            try {
-//                connection.rollback();
-//            } catch (SQLException ex) {
-//                ex.printStackTrace();
-//            }
+
             return null;
         }
     }
