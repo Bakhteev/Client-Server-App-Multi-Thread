@@ -1,9 +1,12 @@
 package commands;
 
 // TODO: ADD LOGGER
+
 import interaction.Request;
 import interaction.Response;
+import managers.DaoManager;
 import managers.LinkedListCollectionManager;
+import models.Person;
 
 public class RemoveByIdCommand extends AbstractCommand {
     LinkedListCollectionManager collectionManager;
@@ -14,18 +17,23 @@ public class RemoveByIdCommand extends AbstractCommand {
     }
 
     @Override
-    public Response<?> execute(Request req) {
+    public Response<?> execute(Request req, DaoManager daoManager) {
         try {
             if (req.getParams() == null) {
                 throw new IllegalArgumentException("Using of command :" + getName() + " " + getParameters());
             }
-        }catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
+        } catch (IllegalArgumentException e) {
             return new Response<>(Response.Status.FAILURE, e.getMessage());
         }
         try {
-            collectionManager.deleteById(Integer.parseInt(req.getParams()));
-            System.out.println("Element was successfully deleted");
+            Person person = daoManager.personDao.getById(req.getParams());
+            if (person == null) {
+                return new Response<>(Response.Status.FAILURE, "Person with id: " + req.getParams() + " not found");
+            }
+            if (person.getOwnerId() != req.getAuthorization()) {
+                return new Response<>(Response.Status.FAILURE, "You have no permission to delete this element");
+            }
+            daoManager.personDao.deleteById(req.getParams());
             return new Response<>(Response.Status.COMPLETED, "", "Element was successfully deleted");
         } catch (NumberFormatException e) {
             System.out.println("Wrong id format");

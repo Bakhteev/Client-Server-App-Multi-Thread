@@ -6,15 +6,14 @@ import dto.PersonDto;
 import models.Coordinates;
 import models.Location;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.LinkedList;
 import java.util.List;
 
 public class LocationDao implements DAO<Location> {
 
     private final Connection connection;
+    private final String getAllLocationsQuery = "SELECT * FROM Locations";
     private final String getLocationByIdQuery = "SELECT * FROM Locations WHERE id=?";
     private final String createLocationQuery = "INSERT INTO Locations (x, y, z, name) VALUES(?, ?, ?, ?) RETURNING id";
     private final String deleteLocationQuery = "DELETE FROM Locations WHERE id=?";
@@ -25,7 +24,24 @@ public class LocationDao implements DAO<Location> {
 
     @Override
     public List<Location> getAll() {
-        return null;
+        List<Location> listOfLocation = new LinkedList<>();
+        try {
+            Statement statement = connection.createStatement();
+            statement.executeQuery(getAllLocationsQuery);
+
+            ResultSet resultSet = statement.getResultSet();
+            while (resultSet.next()) {
+                int locationsId = resultSet.getInt("id");
+                long x = resultSet.getLong("x");
+                int y = resultSet.getInt("y");
+                float z = resultSet.getFloat("z");
+                String name = resultSet.getString("name");
+                listOfLocation.add(new Location(locationsId, x, y, z, name));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return listOfLocation;
     }
 
     @Override
@@ -34,18 +50,13 @@ public class LocationDao implements DAO<Location> {
             PreparedStatement statement = connection.prepareStatement(getLocationByIdQuery);
             statement.setInt(1, Integer.parseInt(id));
             ResultSet locationFromDb = statement.executeQuery();
-            Location location = null;
-            while (locationFromDb.next()) {
-                int locationsId = locationFromDb.getInt("id");
-                long x = locationFromDb.getLong("x");
-                int y = locationFromDb.getInt("y");
-                float z = locationFromDb.getFloat("z");
-                String name = locationFromDb.getString("name");
-                location = new Location(locationsId, x, y, z, name);
-                break;
-            }
-//            statement.executeUpdate();
-            return location;
+            locationFromDb.next();
+            int locationsId = locationFromDb.getInt("id");
+            long x = locationFromDb.getLong("x");
+            int y = locationFromDb.getInt("y");
+            float z = locationFromDb.getFloat("z");
+            String name = locationFromDb.getString("name");
+            return new Location(locationsId, x, y, z, name);
         } catch (SQLException e) {
             e.printStackTrace();
             return new Location();

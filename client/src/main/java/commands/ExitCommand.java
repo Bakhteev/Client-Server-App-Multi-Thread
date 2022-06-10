@@ -1,5 +1,6 @@
 package commands;
 
+import auth.Auth;
 import client.Client;
 import communicate.RequestSender;
 import communicate.ResponseHandler;
@@ -29,13 +30,14 @@ public class ExitCommand extends AbstractCommand {
             return false;
         }
         try {
-            Client.sendRequest(new Request<>(getName()));
+            Client.sendRequest(new Request<>(getName(), Auth.authHeader));
         } catch (IOException e) {
             e.printStackTrace();
         }
+        result(reader);
         ConsoleWorker.println("Good bye");
         Client.close();
-        System.exit(0);
+        System.exit(-1);
         return true;
     }
 }

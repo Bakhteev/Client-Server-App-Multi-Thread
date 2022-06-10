@@ -1,5 +1,6 @@
 package commands;
 
+import auth.Auth;
 import client.Client;
 import communicate.RequestSender;
 import communicate.ResponseHandler;
@@ -43,7 +44,7 @@ public class UpdateCommand extends AbstractCommand {
         }
         PersonDto dto = maker.update();
         try {
-            Client.sendRequest(new Request<>(getName(), argument, dto));
+            Client.sendRequest(new Request<>(getName(), argument, dto, Auth.authHeader));
         } catch (IOException e) {
             e.printStackTrace();
         }

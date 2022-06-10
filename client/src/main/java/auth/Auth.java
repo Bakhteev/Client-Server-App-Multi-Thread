@@ -13,7 +13,8 @@ import java.io.IOException;
 
 public class Auth {
     @Getter
-    boolean isAuthenticated = false;
+    public boolean isAuthenticated = false;
+    public static Integer authHeader;
     AuthMaker maker;
 
     public Auth(AuthMaker maker) {
@@ -23,17 +24,19 @@ public class Auth {
     public void login() {
         String login = "";
         String password = "";
-        while (isAuthenticated) {
+        while (!isAuthenticated) {
             login = maker.askLogin();
             password = maker.askPassword();
             try {
-                Client.sendRequest(new Request<>("login", "", new UserDto(login, password)));
+                Client.sendRequest(new Request<>("login", "", new UserDto(login, password), authHeader));
                 Response res = Client.getResponse();
                 if (res.getStatus() == Response.Status.FAILURE) {
                     ConsoleWorker.printError(res.getMessage());
+//                    continue;
                 } else {
                     ConsoleWorker.println(res.getMessage());
                     setAuthenticated();
+                    authHeader = (int) res.getBody();
                 }
                 return;
             } catch (IOException e) {
@@ -49,13 +52,13 @@ public class Auth {
             login = maker.askLogin();
             password = maker.askPassword();
             try {
-                Client.sendRequest(new Request<>("registration", "", new UserDto(login, password)));
+                Client.sendRequest(new Request<>("registration", "", new UserDto(login, password),authHeader));
                 Response res = Client.getResponse();
                 if (res.getStatus() == Response.Status.FAILURE) {
                     ConsoleWorker.printError(res.getMessage());
                 } else {
                     ConsoleWorker.println(res.getMessage());
-                    setAuthenticated();
+//                    setAuthenticated();
                 }
                 return;
             } catch (IOException e) {

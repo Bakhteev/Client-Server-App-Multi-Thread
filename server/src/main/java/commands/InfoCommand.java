@@ -4,7 +4,14 @@ package commands;
 
 import interaction.Request;
 import interaction.Response;
+import managers.DaoManager;
 import managers.LinkedListCollectionManager;
+import managers.UserManager;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class InfoCommand extends AbstractCommand {
     LinkedListCollectionManager collectionManager;
@@ -15,7 +22,7 @@ public class InfoCommand extends AbstractCommand {
     }
 
     @Override
-    public Response execute(Request req) {
+    public Response execute(Request req, DaoManager daoManager) {
         try {
             if (req.getParams() != null)
                 throw new IllegalArgumentException("Using of command: " + getName());
@@ -23,11 +30,10 @@ public class InfoCommand extends AbstractCommand {
             System.out.println(e.getMessage());
             return new Response(Response.Status.FAILURE, e.getMessage());
         }
-        String body = "Collection initialization time: " + collectionManager.getInitializationTime() + "\n"
-                + "Collection last save time: " + (collectionManager.getLastSaveTime() == null ? "not saved yet" :
-                collectionManager.getLastSaveTime()) + "\n"
-                + "Collection type: " + collectionManager.getType() + "\n"
-                + "Collection size: " + collectionManager.size() + "\n";
+
+        String body =
+                "Number of elements: " + daoManager.personDao.getNumberOfPersons() + "\n"
+                        + "Number of your    elements: " + daoManager.personDao.getNumberOfPersonsByOwnerId(req.getAuthorization()+"");
         return new Response<>(Response.Status.COMPLETED, "", body);
     }
 }

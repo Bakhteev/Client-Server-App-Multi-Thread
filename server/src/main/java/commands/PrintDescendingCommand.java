@@ -4,6 +4,7 @@ package commands;
 import comparators.PersonDescendingOrderComparator;
 import interaction.Request;
 import interaction.Response;
+import managers.DaoManager;
 import models.Person;
 import utils.PersonFormatter;
 
@@ -19,22 +20,22 @@ public class PrintDescendingCommand extends AbstractCommand {
     }
 
     @Override
-    public Response<?> execute(Request req) {
+    public Response<?> execute(Request req, DaoManager daoManager) {
         try {
             if (req.getParams() != null) {
                 throw new IllegalArgumentException("Using of command: " + getName());
             }
-            if (collection.isEmpty()) {
+            if (daoManager.personDao.getNumberOfPersons() == 0) {
                 throw new IllegalArgumentException("Collection is empty");
             }
+            StringBuilder sb = new StringBuilder();
+            daoManager.personDao.getAll().stream().sorted(new PersonDescendingOrderComparator()).forEachOrdered(person -> {
+                sb.append(PersonFormatter.format(person)).append("\n");
+            });
+            return new Response<>(Response.Status.COMPLETED, "", sb.toString());
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
             return new Response<>(Response.Status.FAILURE, e.getMessage());
         }
-        StringBuilder sb = new StringBuilder();
-        collection.stream().sorted(new PersonDescendingOrderComparator()).forEachOrdered(person -> {
-            sb.append(PersonFormatter.format(person)).append("\n");
-        });
-        return new Response<>(Response.Status.COMPLETED, "", sb.toString());
     }
 }

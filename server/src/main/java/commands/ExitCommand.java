@@ -2,7 +2,7 @@ package commands;
 
 import interaction.Request;
 import interaction.Response;
-import modules.CommandWorkerModule;
+import managers.DaoManager;
 
 // TODO: ADD SAVE FILE BEFORE EXIT, ADD LOGGER
 public class ExitCommand extends AbstractCommand {
@@ -12,21 +12,21 @@ public class ExitCommand extends AbstractCommand {
     }
 
 
-    public boolean execute(String arguments) {
-        try {
-            if (!arguments.isEmpty())
-                throw new IllegalArgumentException("Using of command: " + getName());
-        } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
-            return false;
-        }
-        System.out.println("Good bye");
-        System.exit(0);
-        return true;
-    }
+//    public boolean execute(String arguments) {
+//        try {
+//            if (!arguments.isEmpty())
+//                throw new IllegalArgumentException("Using of command: " + getName());
+//        } catch (IllegalArgumentException e) {
+//            System.out.println(e.getMessage());
+//            return false;
+//        }
+//        System.out.println("Good bye");
+//        System.exit(0);
+//        return true;
+//    }
 
     @Override
-    public Response execute(Request req) {
-        return null;
+    public Response execute(Request req, DaoManager daoManager) {
+        return new Response<>(Response.Status.FAILURE, "exit");
     }
 }

@@ -2,6 +2,7 @@ package commands;
 
 import interaction.Request;
 import interaction.Response;
+import managers.DaoManager;
 import managers.ServerCommandManager;
 //TODO: ADD LOGGER, DO SMT WITH CONSOLECLIENT
 
@@ -14,7 +15,7 @@ public class HelpCommand extends AbstractCommand {
     }
 
     @Override
-    public Response execute(Request req) {
+    public Response execute(Request req, DaoManager daoManager) {
         try {
             if (req.getParams() != null) {
                 throw new IllegalArgumentException("Using of command: " + getName());

@@ -22,10 +22,14 @@ public class PersonDao implements DAO<Person> {
     final private String updatePersonQuery = "UPDATE Persons SET name=?, height=?, weight=?, hairsColor=CAST(? AS hairsColor)" +
             "WHERE id = ? AND ownerId = ?";
 
+    final private String getFirstPersonQuery = "SELECT * FROM Persons Limit 1";
+
     final private String deletePersonByIdQuery = "DELETE FROM Persons WHERE id=?";
     final private String getAllPersonsByOwnerIdQuery = "SELECT * FROM Persons WHERE ownerId = ?";
     final private String deleteAllPersonsByOwnerIdQuery = "DELETE FROM Persons WHERE ownerId = ?";
-    final private String deletePersonByOwnerId = "DELETE FROM Persons WHERE ownerId = ?";
+    final private String deletePersonsByOwnerIdQuery = "DELETE FROM Persons WHERE ownerId = ?";
+    final private String getNumberOfPersonsQuery = "SELECT COUNT(*) FROM Persons;";
+    final private String getNumberOfPersonsByOwnerId = "SELECT COUNT(*) FROM Persons WHERE ownerId = ?";
 
     public PersonDao(Connection connection, LocationDao locationDao, CoordinatesDao coordinatesDao) {
         this.connection = connection;
@@ -125,6 +129,40 @@ public class PersonDao implements DAO<Person> {
             return null;
         }
 
+    }
+
+    public Person getFirstPerson() {
+        try {
+            if (autoCommit) {
+                setAutoCommit();
+            }
+            Statement statement = connection.createStatement();
+            statement.executeQuery(getFirstPersonQuery);
+            ResultSet personFromDb = statement.executeQuery(getFirstPersonQuery);
+            if (!personFromDb.next()) {
+                return null;
+            }
+            Integer personsId = personFromDb.getInt("id");
+            String name = personFromDb.getString("name");
+            LocalDateTime dateTime = personFromDb.getTimestamp("date").toLocalDateTime();
+            float weight = personFromDb.getFloat("weight");
+            Long height = personFromDb.getLong("height");
+            Location location = locationDao.getById(personFromDb.getString("location"));
+            Coordinates coordinates = coordinatesDao.getById(personFromDb.getString("coordinates"));
+            HairsColor hairsColor = HairsColor.valueOf(personFromDb.getString("hairsColor"));
+            EyesColor eyesColor = EyesColor.valueOf(personFromDb.getString("eyesColor"));
+            int ownerId = personFromDb.getInt("ownerId");
+
+            if (!autoCommit) {
+                connection.commit();
+                setAutoCommit();
+            }
+            return new Person(personsId, name, coordinates, dateTime, height, weight, eyesColor, hairsColor, location, ownerId);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -302,7 +340,7 @@ public class PersonDao implements DAO<Person> {
     }
 
     public void deleteAllPersonsByOwnerId(String ownerId) {
-        try{
+        try {
             if (autoCommit) {
                 setAutoCommit();
             }
@@ -326,18 +364,18 @@ public class PersonDao implements DAO<Person> {
                 connection.commit();
                 setAutoCommit();
             }
-        } catch(SQLException e){
-        e.printStackTrace();
-        try {
-            if (!autoCommit) {
-                connection.rollback();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            try {
+                if (!autoCommit) {
+                    connection.rollback();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
             }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
         }
-    }
 
-}
+    }
 
 
     @Override
@@ -348,5 +386,30 @@ public class PersonDao implements DAO<Person> {
     public boolean checkPersonByOwnerId(String personId, String ownerId) {
         Person person = getById(personId);
         return ownerId.equals(String.valueOf(person.getOwnerId()));
+    }
+
+    public int getNumberOfPersons() {
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(getNumberOfPersonsQuery);
+            rs.next();
+            return rs.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public int getNumberOfPersonsByOwnerId(String ownerId) {
+        try {
+            PreparedStatement prepareStatement = connection.prepareStatement(getNumberOfPersonsByOwnerId);
+            prepareStatement.setInt(1, Integer.parseInt(ownerId));
+            ResultSet resultSet = prepareStatement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
+        }
     }
 }

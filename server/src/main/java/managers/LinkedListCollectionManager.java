@@ -3,7 +3,6 @@ package managers;
 import comparators.PersonNameComparator;
 import dto.PersonDto;
 import models.Person;
-import validators.PersonValidator;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -58,7 +57,7 @@ public class LinkedListCollectionManager {
 
     public void loadCollection(Person[] collection) {
         try {
-            Arrays.stream(collection).forEach(PersonValidator::checkFields);
+//            Arrays.stream(collection).forEach(PersonValidator::checkFields);
             addAll(Arrays.asList(collection));
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());

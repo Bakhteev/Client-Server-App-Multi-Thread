@@ -4,10 +4,13 @@ package commands;
 
 import interaction.Request;
 import interaction.Response;
+import managers.DaoManager;
+import models.Location;
 import models.Person;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 public class PrintUniqueLocationCommand extends AbstractCommand {
@@ -20,35 +23,34 @@ public class PrintUniqueLocationCommand extends AbstractCommand {
     }
 
     @Override
-    public Response<?> execute(Request req) {
+    public Response<?> execute(Request req, DaoManager daoManager) {
         try {
             if (req.getParams() != null) {
                 throw new IllegalArgumentException("Using of command: " + getName());
             }
-            if (collection.size() == 0) {
+            if (daoManager.personDao.getNumberOfPersons() == 0) {
                 throw new IllegalStateException("Collection is empty");
             }
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
             return new Response<>(Response.Status.FAILURE, e.getMessage());
         }
-        HashMap<String, Integer> map = countLocations();
-        String locationNameToShow = "";
+        HashMap<String, Integer> map = countLocations(daoManager);
+        StringBuilder locationNamesToShow = new StringBuilder();
         for (Map.Entry<String, Integer> entry : map.entrySet()) {
             if (entry.getValue() == 1) {
-                locationNameToShow = entry.getKey();
-                System.out.println("Unique location is " + locationNameToShow);
-                return new Response<>(Response.Status.COMPLETED, "", "Unique location is " + locationNameToShow);
+                locationNamesToShow.append(entry.getKey() + "\n");
             }
         }
-        System.out.println("No unique Location");
-        return new Response<>(Response.Status.COMPLETED, "", "No unique Location");
+        return new Response<>(Response.Status.COMPLETED, "",
+                locationNamesToShow.toString().length() == 0 ? "No unique Location" : locationNamesToShow.toString());
     }
 
-    private HashMap<String, Integer> countLocations() {
+    private HashMap<String, Integer> countLocations(DaoManager daoManager) {
         HashMap<String, Integer> map = new HashMap<>();
-        for (Person element : collection) {
-            String locationName = element.getLocation().getName();
+        List<Location> listOfLocations = daoManager.locationDao.getAll();
+        for (Location element : listOfLocations) {
+            String locationName = element.getName();
             if (map.containsKey(locationName)) {
                 map.put(locationName, map.get(locationName) + 1);
             } else {

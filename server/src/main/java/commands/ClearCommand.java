@@ -2,6 +2,7 @@ package commands;
 
 import interaction.Request;
 import interaction.Response;
+import managers.DaoManager;
 import managers.LinkedListCollectionManager;
 
 //TODO: ADD LOGGER
@@ -14,7 +15,7 @@ public class ClearCommand extends AbstractCommand {
     }
 
     @Override
-    public Response execute(Request req) {
+    public Response execute(Request req, DaoManager daoManager) {
         try {
             if (req.getParams() != null) {
                 throw new IllegalArgumentException("Using of command: " + getName());
@@ -24,13 +25,13 @@ public class ClearCommand extends AbstractCommand {
             return new Response(Response.Status.FAILURE, e.getMessage());
         }
 
-        if (collectionManager.size() == 0) {
-            System.out.println("Collection is empty");
-            return new Response(Response.Status.FAILURE, "Collection is empty");
+        if (daoManager.personDao.getNumberOfPersonsByOwnerId("1") == 0) {
+            return new Response(Response.Status.FAILURE, "You don't have any elements");
         } else {
-            collectionManager.clearCollection();
-            System.out.println("Collection has successfully cleared");
-            return new Response(Response.Status.COMPLETED, "", "Collection has successfully cleared");
+//            collectionManager.clearCollection();
+            daoManager.personDao.deleteAllPersonsByOwnerId(req.getAuthorization()+"");
+//            System.out.println("Collection has successfully cleared");
+            return new Response(Response.Status.COMPLETED, "", "You have successfully deleted all of your elements");
         }
     }
 }

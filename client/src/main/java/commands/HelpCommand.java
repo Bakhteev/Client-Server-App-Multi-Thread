@@ -1,5 +1,6 @@
 package commands;
 
+import auth.Auth;
 import client.Client;
 import communicate.RequestSender;
 import communicate.ResponseHandler;
@@ -34,7 +35,7 @@ public class HelpCommand extends AbstractCommand {
         }
         //            writer.sendRequest(new Request<>(getName()));
         try {
-            Client.sendRequest(new Request<>(getName()));
+            Client.sendRequest(new Request<>(getName(), Auth.authHeader));
         } catch (IOException e) {
             e.printStackTrace();
         }

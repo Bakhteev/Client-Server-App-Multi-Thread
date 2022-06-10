@@ -1,5 +1,6 @@
 package commands;
 
+import auth.Auth;
 import client.Client;
 import communicate.RequestSender;
 import communicate.ResponseHandler;
@@ -30,7 +31,7 @@ public class RemoveFirstCommand extends AbstractCommand {
             return false;
         }
         try {
-            Client.sendRequest(new Request<>(getName()));
+            Client.sendRequest(new Request<>(getName(), Auth.authHeader));
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -1,10 +1,12 @@
 package client;
 
+import auth.Auth;
 import commands.*;
 import communicate.RequestSender;
 import communicate.ResponseHandler;
 import interaction.Request;
 import interaction.Response;
+import maker.AuthMaker;
 import managers.ClientCommandManager;
 import utils.Serializator;
 import workers.ConsoleWorker;
@@ -86,6 +88,7 @@ public class Client {
 
 
     public void get() {
+        Auth auth = new Auth(new AuthMaker(ClientCommandManager.console));
         ClientCommandManager commandManager = new ClientCommandManager();
         commandManager.addCommands(new AbstractCommand[]{
                 new HelpCommand(writer, reader),
@@ -96,16 +99,25 @@ public class Client {
                 new UpdateCommand(writer, reader, commandManager),
                 new ShowCommand(writer, reader),
                 new ClearCommand(writer, reader),
-                new RemoveGreaterCommand(writer, reader, commandManager),
                 new RemoveFirstCommand(writer, reader),
                 new RemoveByIdCommand(writer, reader),
                 new PrintUniqueLocationCommand(writer, reader),
                 new ExecuteScriptCommand(commandManager),
                 new ExitCommand(writer, reader),
-                new AddIfMinCommand(writer, reader, commandManager)
         });
-
+        while (!auth.isAuthenticated) {
+            ConsoleWorker.println("login/sign in");
+           String str = ClientCommandManager.console.readLine().trim();
+            if (str.equals("login")) {
+                auth.login();
+            } else if (str.equals("sign in")) {
+                auth.register();
+            } else {
+                System.out.println("fuck u");
+            }
+        }
         commandManager.startInteractiveMode();
+
 
     }
 
@@ -124,7 +136,8 @@ public class Client {
     public static Response getResponse() {
         try {
             ByteBuffer buf = ByteBuffer.allocate(10000);
-            while (socket.read(buf) <= 0) {}
+            while (socket.read(buf) <= 0) {
+            }
             Response response = Serializator.deserializeObject(buf.array());
             return response;
         } catch (IOException e) {

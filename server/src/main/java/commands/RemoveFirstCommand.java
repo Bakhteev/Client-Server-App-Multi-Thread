@@ -1,9 +1,12 @@
 package commands;
 // TODO: ADD LOGGER
 
+import dao.PersonDao;
 import interaction.Request;
 import interaction.Response;
+import managers.DaoManager;
 import managers.LinkedListCollectionManager;
+import models.Person;
 
 public class RemoveFirstCommand extends AbstractCommand {
     LinkedListCollectionManager collectionManager;
@@ -14,20 +17,24 @@ public class RemoveFirstCommand extends AbstractCommand {
     }
 
     @Override
-    public Response<?> execute(Request req) {
+    public Response<?> execute(Request req, DaoManager daoManager) {
         try {
             if (req.getParams() != null) {
                 throw new IllegalArgumentException("Using of command: " + getName());
             }
-            if (collectionManager.size() == 0) {
+            PersonDao personDao = daoManager.getPersonDao();
+            if (personDao.getNumberOfPersons() == 0) {
                 throw new IllegalArgumentException("Collection is empty");
             }
+            Person personToDelete = personDao.getFirstPerson();
+            if (personToDelete.getOwnerId() == req.getAuthorization()) {
+                personDao.deleteById(personToDelete.getId() + "");
+                return new Response<>(Response.Status.COMPLETED, "", "First element was successfully deleted");
+            } else {
+                return new Response<>(Response.Status.FAILURE, "You have no permission to delete this element");
+            }
         } catch (IllegalArgumentException e) {
-            System.out.println(e.getMessage());
             return new Response<>(Response.Status.FAILURE, e.getMessage());
         }
-        collectionManager.removeFirstElement();
-        System.out.println("First element was successfully deleted");
-        return new Response<>(Response.Status.COMPLETED, "", "First element was successfully deleted");
     }
 }

@@ -1,8 +1,10 @@
 package utils;
 
 import models.Person;
+
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
+import java.util.List;
 
 public class PersonFormatter {
 
@@ -21,12 +23,13 @@ public class PersonFormatter {
                 "   x: " + person.getLocation().getX() + "\n" +
                 "   y: " + person.getLocation().getY() + "\n" +
                 "   Z: " + person.getLocation().getZ() + "\n" +
-                "   Location name: " + person.getLocation().getName();
+                "   Location name: " + person.getLocation().getName() + "\n" +
+                "Owner id: " + person.getOwnerId() + "\n";
     }
 
-    public static String formatCollection(LinkedList<Person> collection) {
+    public static String formatCollection(List<Person> collection) {
         StringBuilder result = new StringBuilder();
-        for (Person person: collection){
+        for (Person person : collection) {
             result.append(format(person));
         }
         return result.toString();

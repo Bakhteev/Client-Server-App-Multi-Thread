@@ -38,12 +38,12 @@ public class MainServer {
                 new HelpCommand(commandManager),
                 new InfoCommand(collectionManager),
                 new ShowCommand(collectionManager.getCollection()),
-//                new AddCommand(collectionManager),
+                new AddCommand(collectionManager),
                 new UpdateCommand(collectionManager),
                 new RemoveByIdCommand(collectionManager),
 //                new AddIfMinCommand(collectionManager),
                 new ExitCommand(),
-                new ExecuteScriptCommand(),
+//                new ExecuteScriptCommand(),
                 new ClearCommand(collectionManager),
 //                new RemoveGreaterCommand(collectionManager),
                 new PrintDescendingCommand(collectionManager.getCollection()),
@@ -91,31 +91,14 @@ public class MainServer {
 //        }).start();
 
 
-        Server server = new Server(Integer.parseInt(args[0]), commandManagers, collectionManager);
+        Server server = new Server(Integer.parseInt(args[0]), commandManager, collectionManager);
         server.start();
-        server.connect();
+        server.communicate();
 
 //
 //
 //        assert connection != null;
 //        String sqlReqInit =
-////                "BEGIN;\n" +
-////                        "\n" +
-////                        "DO $$\n" +
-////                        "BEGIN\n" +
-////                        "    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'eyesColor') THEN" +
-////                        "        create type eyesColor AS ENUM ('GREEN', 'BLUE', 'ORANGE');" +
-////                        "    END IF;\n" +
-////                        "END\n" +
-////                        "$$;" +
-////                        "DO $$\n" +
-////                        "BEGIN\n" +
-////                        "    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'hairsColor') THEN\n" +
-////                        "        CREATE TYPE hairsColor AS ENUM ('BLACK', 'WHITE', 'BROWN');" +
-////                        "    END IF;\n" +
-////                        "END\n" +
-////                        "$$;" +
-////                        "COMMIT;"+
 //                "CREATE TYPE eyesColor AS ENUM ('GREEN', 'BLUE', 'ORANGE');" +
 //                        "CREATE TYPE hairsColor AS ENUM ('BLACK', 'WHITE', 'BROWN');" +
 //                        "CREATE TABLE IF NOT EXISTS Coordinates(" +

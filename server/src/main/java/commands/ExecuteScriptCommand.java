@@ -2,6 +2,7 @@ package commands; // TODO: Think how to do this, ADD LOGGER
 
 import interaction.Request;
 import interaction.Response;
+import managers.DaoManager;
 
 
 public class ExecuteScriptCommand extends AbstractCommand {
@@ -13,7 +14,7 @@ public class ExecuteScriptCommand extends AbstractCommand {
     }
 
     @Override
-    public Response execute(Request req) {
+    public Response execute(Request req, DaoManager daoManager) {
 
         return null;
     }

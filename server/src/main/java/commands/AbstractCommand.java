@@ -2,6 +2,7 @@ package commands;
 
 import interaction.Request;
 import interaction.Response;
+import managers.DaoManager;
 
 public abstract class AbstractCommand {
     private String name;
@@ -26,6 +27,6 @@ public abstract class AbstractCommand {
         return params;
     }
 
-    abstract public Response execute(Request req);
+    abstract public Response execute(Request req, DaoManager daoManager);
 
 }
